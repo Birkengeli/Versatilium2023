@@ -154,6 +154,9 @@ public class Weapon_Versatilium : MonoBehaviour
         if (isWieldedByPlayer && User_POV == null)
             User_POV = GetComponentInChildren<Camera>().transform;
 
+        if (Origin_Barrel == null)
+            Origin_Barrel = User_POV;
+
         audioSource = GetComponent<AudioSource>();
 
 
