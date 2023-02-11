@@ -103,6 +103,8 @@ GameObject:
   - component: {fileID: 3347917897350477994}
   - component: {fileID: 2356575720304098196}
   - component: {fileID: 596461611}
+  - component: {fileID: 350981730}
+  - component: {fileID: 350981734}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Untagged
@@ -125,7 +127,7 @@ Transform:
   - {fileID: 5927128101365098461}
   - {fileID: 1910714535}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2356575720304098196
 CapsuleCollider:
@@ -175,6 +177,210 @@ MonoBehaviour:
   turnSpeed: 2
   FreeCamera: 282
   FootstepFrequency: 1
+--- !u!114 &350981730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413694006064418923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ea4276fc3d2dc429232485a36a4974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugMode: 1
+  canFire: 1
+  WeaponStats:
+    triggerType: 1
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 4
+    burstCounter: 0
+    Primary:
+      ProjectileType: 1
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 9
+      Deviation: 0.1
+      knockback_self: 0
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 0
+      ProjectileScale: 0.5
+      inheritUserVelocity: 0
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
+      Audio_OnFire:
+        Turret: 0
+        Generic: 0
+        Weapon: 0
+        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
+    Secondary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      knockback_self: 0
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
+      Audio_OnFire:
+        Turret: 0
+        Generic: 0
+        Weapon: 0
+        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
+    characterController: {fileID: 0}
+  WeaponStats_Alt:
+    triggerType: 1
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 4
+    burstCounter: 0
+    Primary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      knockback_self: 0
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
+      Audio_OnFire:
+        Turret: 0
+        Generic: 0
+        Weapon: 0
+        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
+    Secondary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      knockback_self: 0
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
+      Audio_OnFire:
+        Turret: 0
+        Generic: 0
+        Weapon: 0
+        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
+    characterController: {fileID: 0}
+  TriggerPrimary: 323
+  TriggerSecondary: 324
+  triggerType: 1
+  triggerType_Secondary: 4
+  Charge_minimumTime: 0.1
+  Charge_maximumTime: 1
+  User_POV: {fileID: 0}
+  Model_Weapon: {fileID: 0}
+  Origin_Barrel: {fileID: 0}
+  gunParticles: {fileID: 0}
+  Projectiles: []
+  fireRate_GlobalCD: 0
+  frameCounter: 0
+--- !u!114 &350981734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413694006064418923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb1eead27ab9c24c9abd89525e23650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Canvas_WeaponSwitch: {fileID: 0}
+  WeaponBuildingMode: 0
+  InventoryKey: 9
+  sounds: []
+  SlowTimeBy: 10
+  tintColor: {r: 0, g: 0, b: 1, a: 0.5254902}
+  tintFadeTime: 0.333
+  missingIcon: {fileID: 21300000, guid: 626b9cddb29049e4cac50cd87b419945, type: 3}
+  allowDuplicates: 1
+  Modules:
+  - name: Electric
+    moduleSlot: 1
+    state: 2
+    coreColor: {r: 0, g: 1, b: 0.96346426, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 53434277, guid: fa779bddf0b6fd7448ecde60044cdc26, type: 3}
+  - name: Plasma
+    moduleSlot: 1
+    state: 2
+    coreColor: {r: 0.74919415, g: 0, b: 1, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 408272156, guid: fa779bddf0b6fd7448ecde60044cdc26, type: 3}
+  - name: Laser
+    moduleSlot: 1
+    state: 2
+    coreColor: {r: 1, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 73755412, guid: fa779bddf0b6fd7448ecde60044cdc26, type: 3}
+  - name: Single Shot
+    moduleSlot: 0
+    state: 2
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: -802050363, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+  - name: Burst
+    moduleSlot: 0
+    state: 2
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 56064797, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+  - name: Ricochett
+    moduleSlot: 0
+    state: 2
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: -1000106602, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+  - name: Shotgun
+    moduleSlot: 0
+    state: 2
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 404552445, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+  - name: Debug
+    moduleSlot: 0
+    state: 0
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    storedIndexes: 
+    Icon: {fileID: 0}
+  UI_Cores:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &6371564752146858477
 GameObject:
   m_ObjectHideFlags: 0

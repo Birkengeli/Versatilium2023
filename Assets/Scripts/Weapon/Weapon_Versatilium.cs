@@ -647,17 +647,20 @@ public class Weapon_Versatilium : MonoBehaviour
 
         projectileArray[index] = currentProjectile;
 
-								#region Destruction
-								if (currentProjectile.toBeDestroyed)
+        #region Destruction
+        if (currentProjectile.toBeDestroyed && currentProjectile.visualTransform != null)
         {
-            foreach (Transform child in currentProjectile.visualTransform)
+
+            if (currentProjectile.visualTransform != null)
             {
-                Destroy(child.gameObject, 0); // This should actually be pooled.
-                child.parent = null;
+                foreach (Transform child in currentProjectile.visualTransform)
+                {
+                    Destroy(child.gameObject, 0); // This should actually be pooled.
+                    child.parent = null;
+                }
+
+                Destroy(currentProjectile.visualTransform.gameObject);
             }
-
-            Destroy(currentProjectile.visualTransform.gameObject);
-
             Projectiles.RemoveAt(index);
             index--; // purely cermonial. This does nothing.
         }
