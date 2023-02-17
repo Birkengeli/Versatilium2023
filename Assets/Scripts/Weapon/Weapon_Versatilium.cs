@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
-				#region Enums
-				public enum ProjectileTypes
+	#region Enums
+	public enum ProjectileTypes
     {
         Hitscan, Projectile
     }
@@ -32,7 +32,7 @@ public class Weapon_Versatilium : MonoBehaviour
     }
 				#endregion
 
-				#region Classes & Structs
+	#region Classes & Structs
 
     [System.Serializable]
     public struct Projectile
@@ -58,7 +58,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
     [System.Serializable]
     public class WeaponStatistics
-				{
+	{
         [Header("General")]
         public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
 
@@ -87,13 +87,6 @@ public class Weapon_Versatilium : MonoBehaviour
         public int PelletCount = 1;
         public float Deviation = 0.01f;
         public float knockback_self = 0;
-
-        [Header("Projectile")]
-        public Visual_Type useScifipackProjectiles;
-        public GameObject sciFiProjectile_prefab;
-        public bool sciFi_DetachTrail = true;
-
-        public float ProjectileScale = 0.5f;
        
         public bool inheritUserVelocity = true;
 
@@ -146,6 +139,12 @@ public class Weapon_Versatilium : MonoBehaviour
     public float fireRate_GlobalCD;
 
     Controller_Character playerScript;
+    public int frameCounter;
+
+    [Header("Visuals")]
+    public Visual_Type useVisuals = Visual_Type.None;
+    public GameObject projectilePrefab;
+    public float ProjectileScale = 0.5f;
 
     void Start()
     {
@@ -167,7 +166,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
     }
 
-    public int frameCounter;
+
 
     void Update()
     {
@@ -300,7 +299,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#endregion
 
-				#region Projectile
+	#region Projectile
 
     void CreateProjectile(WeaponStatistics currentStats, ProjectileStatistics projectileStats)
     {
@@ -324,8 +323,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
 								#endregion
 
-								#region Hitscan
-								if (projectileStats.ProjectileType == ProjectileTypes.Hitscan)
+		#region Hitscan
+		if (projectileStats.ProjectileType == ProjectileTypes.Hitscan)
         {
 
             for (int i = 0; i < projectileStats.PelletCount; i++)
@@ -340,7 +339,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hitSomething = hit.transform != null;
 
 
-                if (projectileStats.useScifipackProjectiles == Visual_Type.Laser)
+                if (useVisuals == Visual_Type.Laser)
                 {
                     Vector3 laserPoint  = hitSomething ? hit.point : rayOrigin + rayDirection * 1000; 
                     float laserLength = hitSomething ? hit.distance : 1000;
@@ -349,7 +348,7 @@ public class Weapon_Versatilium : MonoBehaviour
                     currentProjectile.userTransform = transform;
 
                     currentProjectile.ProjectileType = ProjectileTypes.Hitscan;
-                    currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
+                    currentProjectile.visualTransform = Instantiate(projectilePrefab).transform;
         
                     currentProjectile.velocity = laserPoint;
    
@@ -382,7 +381,7 @@ public class Weapon_Versatilium : MonoBehaviour
                         currentProjectile.position = bounceOrigin; // Bouncing is done from the old laserpoint
                         currentProjectile.velocity = laserPoint; // The new laserpoint
 
-                        currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
+                        currentProjectile.visualTransform = Instantiate(projectilePrefab).transform;
                         currentProjectile.visualTransform.position = currentProjectile.position;
                         currentProjectile.visualTransform.LookAt(currentProjectile.velocity);
 
@@ -463,13 +462,11 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
 
-                if (projectileStats.useScifipackProjectiles == Visual_Type.Projectile)
+                if (useVisuals == Visual_Type.Projectile)
                 {
-                    currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
+                    currentProjectile.visualTransform = Instantiate(projectilePrefab).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
-                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.ProjectileScale;
-
-                    currentProjectile.sciFi_detachTrail = projectileStats.sciFi_DetachTrail;
+                    currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale;
                 }
 
 
@@ -540,7 +537,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         bool hasImpacted = false;
 
-								#region Hitscan
+		#region Hitscan
 								if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
         {
             float laserLifeTime = 0.1f;
@@ -550,7 +547,7 @@ public class Weapon_Versatilium : MonoBehaviour
             currentProjectile.lifeTime += timeStep;
 
             float distance = Vector3.Distance(currentProjectile.position, currentProjectile.velocity);
-            float oldScale = currentProjectile.projectileStats.ProjectileScale;
+            float oldScale = ProjectileScale;
 
             currentProjectile.visualTransform.LookAt(currentProjectile.velocity);
             currentProjectile.visualTransform.localScale = Vector3.one;
@@ -570,7 +567,7 @@ public class Weapon_Versatilium : MonoBehaviour
             float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
 
             if (currentProjectile.visualTransform != null)
-                currentProjectile.visualTransform.localScale = Vector3.one * currentProjectile.projectileStats.ProjectileScale * distanceScale;
+                currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale * distanceScale;
 
             {
                 RaycastHit hit;

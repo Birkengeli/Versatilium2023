@@ -20,10 +20,17 @@ public class Tools_Animator : MonoBehaviour
     public int FrameRate = 10;
     private float frameTimer;
     private int frameIndex;
+    public bool playOnAwake = true;
 
     [Header("Assign Variables")]
     public SpriteRenderer spriteRenderer;
 
+    private void Awake()
+    {
+        if (playOnAwake && Animations.Length > 0)
+            Play(Animations[0].name);
+        
+    }
     void Update()
     {
         frameTimer += Time.deltaTime;

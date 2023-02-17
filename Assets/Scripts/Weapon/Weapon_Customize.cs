@@ -79,7 +79,7 @@ public class Weapon_Customize : MonoBehaviour
 
 				#endregion
 
-				void OpenInventory(int keyState)
+	void OpenInventory(int keyState)
     {
         if (WeaponBuildingMode == WeaponBuildingModes.Premade)
         {

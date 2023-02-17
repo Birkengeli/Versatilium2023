@@ -11,6 +11,7 @@ public class Tools_Sprite : MonoBehaviour
     public float spritePlaySpeed = 10;
     private float spritePlayTimer = 0;
     private int spritePlayIndex = 0;
+    public bool useStaticPitch = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,9 @@ public class Tools_Sprite : MonoBehaviour
     void SpritePerspective()
     {
         spriteRenderer.transform.forward = -CameraTransform.forward; // The Actual renderer always faces me.
+
+        if (useStaticPitch)
+            spriteRenderer.transform.eulerAngles = new Vector3(0, spriteRenderer.transform.eulerAngles.y, spriteRenderer.transform.eulerAngles.z);
         spritePlayTimer += Time.deltaTime;
 
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,11 +24,19 @@ public class Weapon_Switching : MonoBehaviour
             isDisabled, isLocked, isAvailable,
         }
 
+        public enum duplicateOptions
+        {
+            useGlobalSettings, always, never,
+        }
+
         public string name = "Example Core";
 
         public ModuleSlots moduleSlot = ModuleSlots.SubCore;
 
         public Availability state = Availability.isAvailable;
+        public duplicateOptions allowDuplicates = duplicateOptions.useGlobalSettings;
+        [TextArea(5, 20)]
+        public string description;
 
         [Header("Cores")]
         public Color coreColor = Color.cyan;
@@ -39,8 +48,11 @@ public class Weapon_Switching : MonoBehaviour
 
     [Header("Must Be Assigned")]
     public GameObject Canvas_WeaponSwitch;
+    public GameObject Canvas_Infobox;
+    public TMP_Text Canvas_InfoBoxText;
     Controller_Character playerScript;
     Weapon_Versatilium weaponScript;
+    public Material coreColor;
 
 
     [Header("Settings")]
@@ -67,24 +79,6 @@ public class Weapon_Switching : MonoBehaviour
         ToggleUI(false);
 
         ResetCores();
-    }
-
-    void ResetCores(bool resetSubCoresOnly = false)
-    {
-        int mainCoreIndex = customizeableSlots.Length - 1;
-
-        if (!resetSubCoresOnly)
-        {
-            ApplyModule(mainCoreIndex, 0);
-        }
-
-        for (int i = 0; i < mainCoreIndex; i++)
-        {
-            customizeableSlots[i] = 0;
-            Button_OnClick(i * 2 + 1);
-        }
-
-
     }
 
     // Update is called once per frame
@@ -171,6 +165,8 @@ public class Weapon_Switching : MonoBehaviour
                 if (isMainCore && WeaponBuildingMode == WeaponBuildingModes.CoreBased)
                     StoreIndexes(nextModule, true);
 
+                
+
                 Debug.Log("Swapped module to " + nextModule.name + " at position '" + newIndex + "'.");
             }
         }
@@ -182,15 +178,37 @@ public class Weapon_Switching : MonoBehaviour
 
     void ApplyModule(int slotIndex, int moduleIndex)
     {
+
+        Module previousModule = Modules[customizeableSlots[slotIndex]];
+
+        ApplyModuleStats(previousModule.name, true);
+
         customizeableSlots[slotIndex] = moduleIndex;
         Module currentModule = Modules[moduleIndex];
+
+        ApplyModuleStats(currentModule.name);
 
         #region Apply UI
         if (UI_Cores.Length >= slotIndex)
         {
             UI_Cores[slotIndex].sprite = currentModule.Icon != null ? currentModule.Icon : missingIcon;
         }
+
+        if(Canvas_Infobox != null)
+        {
+            bool hasText = currentModule.description.Length != 0;
+            Canvas_Infobox.SetActive(hasText);
+
+            Canvas_InfoBoxText.text = currentModule.description;
+
+        }
+
         #endregion
+
+        if (currentModule.moduleSlot == Module.ModuleSlots.Core)
+        {
+            coreColor.color = currentModule.coreColor;
+        }
     }
 
     bool GetNextAvailableModule(int currentIndex, bool reverse, Module.ModuleSlots slotType, out int nextIndex, out Module nextModule)
@@ -212,7 +230,7 @@ public class Weapon_Switching : MonoBehaviour
             bool isUnlocked = nextModule.state == Module.Availability.isAvailable;
             bool isInUse = isModuleInUse(currentIndex);
 
-            if (isCorrectSlot && isUnlocked && (allowDuplicates || !isInUse))
+            if (isCorrectSlot && isUnlocked && ((allowDuplicates && nextModule.allowDuplicates != Module.duplicateOptions.never) || !isInUse || nextModule.allowDuplicates == Module.duplicateOptions.always))
             {
                 nextIndex = currentIndex;
                 return true;
@@ -227,10 +245,55 @@ public class Weapon_Switching : MonoBehaviour
     }
 
 
+    void ApplyModuleStats(string name, bool unEquip = false)
+    {
 
 
+        if (name == "-Empty-")
+        {
+            return;
+        }
+
+        if (name == "Shotgun")
+        {
+
+            int pelletIncrease = 8;
+            float deviationIncrease = 0.05f;
+
+            if (!unEquip)
+            {
+                weaponScript.WeaponStats.Primary.PelletCount += pelletIncrease;
+                weaponScript.WeaponStats.Primary.Deviation += deviationIncrease;
+            }
+            else
+            {
+                weaponScript.WeaponStats.Primary.PelletCount -= pelletIncrease;
+                weaponScript.WeaponStats.Primary.Deviation -= deviationIncrease;
+            }
+        }
+    }
 
     #region Tools
+
+
+    void ResetCores(bool resetSubCoresOnly = false)
+    {
+        int mainCoreIndex = customizeableSlots.Length - 1;
+
+        if (!resetSubCoresOnly)
+        {
+            ApplyModule(mainCoreIndex, 0);
+        }
+
+        for (int i = 0; i < mainCoreIndex; i++)
+        {
+            customizeableSlots[i] = 0;
+            Button_OnClick(i * 2 + 1);
+        }
+
+
+    }
+
 
     void StoreIndexes(Module currentModule, bool loadIndexes)
     {
@@ -272,6 +335,9 @@ public class Weapon_Switching : MonoBehaviour
             GameObject foreGround = Canvas_WeaponSwitch.transform.GetChild(0).gameObject;
             foreGround.SetActive(activate);
         }
+
+        if(Canvas_Infobox != null)
+            Canvas_Infobox.SetActive(false);
     }
 
     bool isModuleInUse(int moduleIndex)
