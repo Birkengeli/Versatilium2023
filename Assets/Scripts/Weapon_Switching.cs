@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,8 +41,10 @@ public class Weapon_Switching : MonoBehaviour
 
         [Header("Cores")]
         public Color coreColor = Color.cyan;
-        [HideInInspector] public int[] storedIndexes;
         public Sprite Icon;
+
+        [Header("Read-Only")]
+        public int[] storedIndexes;
 
     }
     #endregion
@@ -79,6 +82,18 @@ public class Weapon_Switching : MonoBehaviour
         ToggleUI(false);
 
         ResetCores();
+
+        #region Apply defaults to all maincores
+
+        for (int i = 0; i < Modules.Length; i++)
+        {
+            Module currentModule = Modules[i];
+            if (currentModule.moduleSlot == Module.ModuleSlots.Core)
+                StoreIndexes(currentModule, false);
+            
+
+        }
+        #endregion
     }
 
     // Update is called once per frame
@@ -270,6 +285,22 @@ public class Weapon_Switching : MonoBehaviour
                 weaponScript.WeaponStats.Primary.PelletCount -= pelletIncrease;
                 weaponScript.WeaponStats.Primary.Deviation -= deviationIncrease;
             }
+
+            return;
+        }
+        if (name == "Ricochett")
+        {
+
+            if (!unEquip)
+            {
+                weaponScript.WeaponStats.Primary.bounceCount += 1;
+            }
+            else
+            {
+                weaponScript.WeaponStats.Primary.bounceCount -= 1;
+            }
+
+            return;
         }
     }
 

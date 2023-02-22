@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Controller_Character;
 
 public class Controller_Enemy : MonoBehaviour
 {
@@ -24,11 +25,20 @@ public class Controller_Enemy : MonoBehaviour
         Searching,
         Detracting,
     }
-
-
+    [System.Flags]
+    public enum EnemyBehaviours
+    {
+        Nothing = 1 << 0,
+        canMove = 1 << 1,
+        canAttack = 1 << 2,
+        isInvincible = 1 << 3,
+        hasAirControl = 1 << 1 | 1 << 4,
+    }
 
     public Manager_Audio[] Audio;
 
+
+    public EnemyBehaviours enemyBehaviours = EnemyBehaviours.Nothing;
 
     public enum EnemyTypes
     {
@@ -106,7 +116,7 @@ public class Controller_Enemy : MonoBehaviour
             HumanoidBehavior(timeStep);
     }
 
-				#region Look At
+	#region Look At
 
 				float LookAt(Vector3 targetPosition, Vector3 currentForward, Transform horizontalTransform, Transform verticalTransform)
     {
@@ -173,7 +183,7 @@ public class Controller_Enemy : MonoBehaviour
 
 				#endregion
 
-				#region Lead Shots
+	#region Lead Shots
 				Vector3 targetPosition_Previous;
 
     Vector3 Target_LeadShot(Vector3 targetPosition_Current, float projectileSpeed) // I believe my inconsistent framerate causes some leading issues.
@@ -258,17 +268,17 @@ public class Controller_Enemy : MonoBehaviour
             Manager_Audio.Play(Audio, Sounds_Turret.OnActivate);
         }
 
-								if (whileErecting)
+        if (whileErecting)
         {
             ActivationTime_Timer += timeStep;
 
             float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
             Turret_Hinge.localPosition = -Vector3.forward * newZ;
         }
-								#endregion
+		#endregion
 
-								#region Ready
-								if (onReady || whileReady)
+		#region Ready
+		if (onReady || whileReady)
         {
             if(onReady)
 												{
@@ -353,11 +363,9 @@ public class Controller_Enemy : MonoBehaviour
             TurretState = TurretStates.Sleeping;
         }
         #endregion
-				}
+	}
 
-
-
-				void HumanoidBehavior(float timeStep)
+	void HumanoidBehavior(float timeStep)
     {
         Vector3 direction = velocity.normalized;
         previousPosition = transform.position;
@@ -390,8 +398,8 @@ public class Controller_Enemy : MonoBehaviour
 
             Vector3 targetPosition = player.position;
 
-												#region Aiming
-												if (isLeadingTarget)
+			#region Aiming
+			if (isLeadingTarget)
                 targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
 
 
@@ -426,7 +434,6 @@ public class Controller_Enemy : MonoBehaviour
 
 												#endregion
 
-
             moveToThisLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
             moveToThisLocation = targetPosition;
         }
@@ -455,7 +462,7 @@ public class Controller_Enemy : MonoBehaviour
     {
         return (StatusEffects & effect) != 0;
     }
-				#region Movement
+	#region Movement
 
 				void Movement(float timeStep, Vector3 targetLocation)
     {
@@ -614,5 +621,23 @@ public class Controller_Enemy : MonoBehaviour
         }
 
     }
-    
+
+    void ApplyFlag(EnemyBehaviours effect, bool removeEffectInstead = false)
+    {
+        if (!removeEffectInstead)
+        {
+            enemyBehaviours |= effect;
+        }
+        else
+        {
+            enemyBehaviours &= ~effect;
+        }
+
+    }
+
+    public bool HasFlag(EnemyBehaviours effect)
+    {
+        return (enemyBehaviours & effect) != 0;
+    }
+
 }

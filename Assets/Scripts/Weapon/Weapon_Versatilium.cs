@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
@@ -89,6 +90,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public float knockback_self = 0;
        
         public bool inheritUserVelocity = true;
+        public float targetSeekingStrength = 0;
 
         [Header("Range")]
         public float distanceBeforeDamageDrop = 20;
@@ -523,8 +525,38 @@ public class Weapon_Versatilium : MonoBehaviour
 
     }
 
-				#endregion
+    #endregion
 
+
+    Transform FindClosestTarget(Vector3 position, Vector3 forward, float radius, float coneSize = 180)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, radius, ~new LayerMask(), QueryTriggerInteraction.Ignore);
+
+        float degreesToRange = -((coneSize / 360f) - 0.5f) * 2;
+
+        float closestDistance = Mathf.Infinity;
+        Transform closestTarget = null;
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Transform currentTarget = colliders[i].transform;
+            Vector3 directionToTarget = (currentTarget.position - position).normalized;
+
+
+            bool isForwardEnough = Vector3.Dot(forward, directionToTarget) > degreesToRange;
+            bool isTaggedCorrectly = currentTarget.tag == "Target";
+            float distance = Vector3.Distance(position, currentTarget.position);
+
+            if (isForwardEnough && distance < closestDistance && isTaggedCorrectly)
+            {
+                closestDistance = distance;
+                closestTarget = currentTarget;
+            }
+
+        }
+
+        return closestTarget;
+    }
 
     public void OnHit(string testValue)
     {
@@ -538,7 +570,7 @@ public class Weapon_Versatilium : MonoBehaviour
         bool hasImpacted = false;
 
 		#region Hitscan
-								if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
+		if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
         {
             float laserLifeTime = 0.1f;
 
@@ -569,6 +601,16 @@ public class Weapon_Versatilium : MonoBehaviour
             if (currentProjectile.visualTransform != null)
                 currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale * distanceScale;
 
+            if(false)
+            { // Adjust the velocity for homing.
+                Transform target = FindClosestTarget(currentProjectile.position, currentProjectile.velocity.normalized, 1000, 360);
+                if (target != null)
+                {
+                    Vector3 directionToTarget = (target.position - currentProjectile.position);
+                    currentProjectile.velocity += directionToTarget * 10 * timeStep;
+                }
+            }
+
             {
                 RaycastHit hit;
                 Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
@@ -577,6 +619,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hitMyself = hit.transform == currentProjectile.userTransform;
                 bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
 
+                bool unBounceableSurface = hit.transform.tag == "No Bouncing Projectile";
 
                 if (hitSomething && (!hitMyself || hasGoneFar)) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
@@ -601,7 +644,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     }
 
-                    else if(currentProjectile.remainingBounces == 0 && currentProjectile.sciFi_detachTrail)
+                    else if(currentProjectile.remainingBounces == 0 && currentProjectile.sciFi_detachTrail && !unBounceableSurface)
                     {
                         GameObject Explosion = currentProjectile.visualTransform.GetChild(0).gameObject;
 
