@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Target
   - No Bouncing Projectile
+  - Always Bounces Projectile
   layers:
   - Default
   - TransparentFX

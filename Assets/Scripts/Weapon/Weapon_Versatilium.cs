@@ -620,6 +620,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
+                bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
 
                 if (hitSomething && (!hitMyself || hasGoneFar)) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
@@ -630,9 +631,10 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized, hasGoneFar, transform);
 
-                    if (currentProjectile.remainingBounces > 0 && !unBounceableSurface)
+                    if (currentProjectile.remainingBounces > 0 && !unBounceableSurface || bounceableSurface)
                     {
-                        currentProjectile.remainingBounces--;
+                        if(!bounceableSurface)
+                            currentProjectile.remainingBounces--;
                         hasImpacted = false;
 
                         currentProjectile.position = hit.point; // Reset from the wall where it bounced;
