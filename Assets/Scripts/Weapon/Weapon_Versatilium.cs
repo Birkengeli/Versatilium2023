@@ -619,7 +619,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hitMyself = hit.transform == currentProjectile.userTransform;
                 bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
 
-                bool unBounceableSurface = hit.transform.tag == "No Bouncing Projectile";
+                bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
 
                 if (hitSomething && (!hitMyself || hasGoneFar)) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
@@ -630,7 +630,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized, hasGoneFar, transform);
 
-                    if (currentProjectile.remainingBounces > 0)
+                    if (currentProjectile.remainingBounces > 0 && !unBounceableSurface)
                     {
                         currentProjectile.remainingBounces--;
                         hasImpacted = false;
@@ -644,7 +644,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     }
 
-                    else if(currentProjectile.remainingBounces == 0 && currentProjectile.sciFi_detachTrail && !unBounceableSurface)
+                    else if(currentProjectile.remainingBounces == 0 && currentProjectile.sciFi_detachTrail)
                     {
                         GameObject Explosion = currentProjectile.visualTransform.GetChild(0).gameObject;
 
