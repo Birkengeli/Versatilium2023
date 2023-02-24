@@ -97,6 +97,8 @@ public class Component_Health : MonoBehaviour
         if (!isDead)
         {
 
+            Debug.LogWarning("" + transform.name + " took '" + damage + "' damage.");
+
             if (isPlayer)
             {
                 playerScript.velocity = knockBack;
@@ -110,7 +112,6 @@ public class Component_Health : MonoBehaviour
 
                 if (enemyScript.HasFlag((int)enemyScript.BehaviorTags, (int)Controller_Enemy.BehaviorTag.isInvincible))
                     return;
-                
 
 
 
