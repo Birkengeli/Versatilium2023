@@ -432,7 +432,16 @@ public class Weapon_Versatilium : MonoBehaviour
 
             for (int i = 0; i < projectileStats.PelletCount; i++)
             {
-                Vector3 rayDeviation = User_POV.right * Random.Range(-projectileStats.Deviation, projectileStats.Deviation) + User_POV.up * Random.Range(-projectileStats.Deviation, projectileStats.Deviation);
+                #region Spread
+                bool isMultiPellet = projectileStats.PelletCount > 0;
+                bool isFixedSpread = isMultiPellet && false;
+                bool isFixedDistance = isMultiPellet && false;
+
+                Vector3 angle = Quaternion.AngleAxis(isFixedSpread ? (360 / projectileStats.PelletCount) * i : Random.Range(0, 180), User_POV.forward) * User_POV.up; // Counter Clockwise. 180 Degress, because deviation is both axies
+                float distance = Random.Range(-projectileStats.Deviation, projectileStats.Deviation);
+
+                Vector3 rayDeviation = angle * (isFixedDistance ? projectileStats.Deviation : distance);
+                #endregion
 
                 Vector3 rayOrigin = User_POV.position;
                 Vector3 rayDirection = User_POV.forward + rayDeviation;
@@ -452,7 +461,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.remainingBounces = projectileStats.bounceCount;
 
                 if(projectileStats.inheritUserVelocity)
-																{
+				{
                     if (isWieldedByPlayer)
                     {
                         if (currentStats.characterController == null)
@@ -462,16 +471,12 @@ public class Weapon_Versatilium : MonoBehaviour
                     }
                 }
 
-
-
                 if (useVisuals == Visual_Type.Projectile)
                 {
                     currentProjectile.visualTransform = Instantiate(projectilePrefab).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
                     currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale;
                 }
-
-
 
                 Projectiles.Add(currentProjectile);
 
@@ -516,7 +521,7 @@ public class Weapon_Versatilium : MonoBehaviour
             {
                 int damage = Mathf.RoundToInt((projectileStats.damage * distanceModifier) / projectileStats.PelletCount);
 
-                Component_Health.Get(currentHit).OnTakingDamage(damage, knockBack * projectileStats.knockback * distanceModifier);
+                Component_Health.Get(currentHit).OnTakingDamage(damage, (knockBack * projectileStats.knockback * distanceModifier) / projectileStats.PelletCount);
             }
 
 
@@ -707,12 +712,12 @@ public class Weapon_Versatilium : MonoBehaviour
             index--; // purely cermonial. This does nothing.
         }
 								#endregion
-				}
+	}
 
     public void BeamStretcher (LineRenderer line, float distance)
     {
-             line.SetPosition(0, line.transform.InverseTransformPoint(line.transform.position));
-             line.SetPosition(1, line.transform.InverseTransformPoint(line.transform.position + line.transform.forward * distance));
+        line.SetPosition(0, line.transform.InverseTransformPoint(line.transform.position));
+        line.SetPosition(1, line.transform.InverseTransformPoint(line.transform.position + line.transform.forward * distance));
     }
 
     GameObject Projectile_Prefab_Prep(GameObject projectilePrefab)

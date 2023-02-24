@@ -154,6 +154,8 @@ public class Controller_Character : MonoBehaviour
 
     void ControllGravity(float timeStep)
     {
+        bool freezeMovement = HasStatusEffect(StatusEffect.FreezeMovement);
+
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2 + 0.05f, ~new LayerMask(), QueryTriggerInteraction.Ignore);
 
@@ -177,7 +179,7 @@ public class Controller_Character : MonoBehaviour
 
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !freezeMovement)
             {
                 float jumpStrength = Mathf.Sqrt(-2f * -gravity * jumpHeight); // The true strength of the jump
                 velocity += Vector3.up * jumpStrength;

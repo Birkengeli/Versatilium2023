@@ -15,19 +15,17 @@ public class Component_Health : MonoBehaviour
     [Header("Variables")]
     public bool isDead;
 
-    [Header("Enemy only")]
-    public bool hasDeathAnimation = false;
-
     [Header("Player only")]
     public float deathCountdown = 5f;
     private float deathCountdown_Timer = 0;
     public float deathCountdown_SpeedModifier = 2;
     public float deathCountdown_SpeedDuration = 0.5f;
     private float lastSpeedUse;
+    public Image UI_Healthbar_Fill;
+    public Image UI_POV_Death;
     public GameObject Prop_Weapon;
 
-    private Image POV_Death;
-    private Image UI_Healthbar_Fill;
+
 
     [Header("Components")]
     Controller_Character playerScript;
@@ -47,15 +45,6 @@ public class Component_Health : MonoBehaviour
         if (isPlayer)
         {
             playerScript = GetComponent<Controller_Character>();
-
-            GameObject canvas = GameObject.Find("_Canvas");
-
-            if (canvas == null)
-                Debug.Log("Error, could not find the '_Canvas'.");
-
-            UI_Healthbar_Fill = Weapon_Switching.GetChildByName("UI_Healthbar_Fill", canvas.transform).GetComponent<Image>();
-
-            POV_Death = Weapon_Switching.GetChildByName("POV_Death", canvas.transform).GetComponent<Image>();
         }
     }
 
@@ -119,27 +108,21 @@ public class Component_Health : MonoBehaviour
             if (!isPlayer)
             {
 
-                if (enemyScript.isInvincible)
-                {
-                 
+                if (enemyScript.HasFlag((int)enemyScript.BehaviorTags, (int)Controller_Enemy.BehaviorTag.isInvincible))
                     return;
-                }
+                
 
 
 
-                if (enemyScript.enemyType == Controller_Enemy.EnemyTypes.Humanoid)
+                enemyScript.velocity += knockBack * knockback_Multiplier;
+
+                if (!enemyScript.isInCombat)
                 {
-                    enemyScript.velocity += knockBack * knockback_Multiplier;
+                    Animator anim = GetComponentInChildren<Animator>();
+                    //anim.SetTrigger("onCombat");
 
-                    if (!enemyScript.isInCombat)
-                    {
-                        Animator anim = GetComponentInChildren<Animator>();
-                        anim.SetTrigger("onCombat");
-
-                        enemyScript.isInCombat = true;
-                    }
+                    enemyScript.isInCombat = true;
                 }
-
             }
 
             healthCurrent -= damage;
@@ -210,7 +193,7 @@ public class Component_Health : MonoBehaviour
                     weaponProp.GetComponent<Rigidbody>().velocity = playerScript.velocity * 0.6f;
                 }
 
-                transform.GetChild(1).gameObject.SetActive(false);
+                //transform.GetChild(1).gameObject.SetActive(false);
 
                 UI_Healthbar_Fill.transform.parent.gameObject.SetActive(false);
                 
@@ -220,13 +203,13 @@ public class Component_Health : MonoBehaviour
 
 
 
-            if (POV_Death != null)
+            if (UI_POV_Death != null)
             {
-                POV_Death.gameObject.SetActive(true);
+                UI_POV_Death.gameObject.SetActive(true);
 
                 float alpha = (deathCountdown_Timer) / (deathCountdown*1.5f);
 
-                POV_Death.color = new Color(0.8f, 0, 0, alpha);
+                UI_POV_Death.color = new Color(0.8f, 0, 0, alpha);
             }
 
             #region Spamming buttons make you respawn faster
@@ -240,7 +223,7 @@ public class Component_Health : MonoBehaviour
             }
 												#endregion
 
-												if (deathCountdown_Timer > deathCountdown)
+			if (deathCountdown_Timer > deathCountdown)
             {
                 if (deathCountdown_Timer != -1) // On Time run out
                 {
@@ -261,14 +244,6 @@ public class Component_Health : MonoBehaviour
                 GetComponent<Collider>().enabled = false;
 
                 enemyScript.onDeath();
-
-                if (!hasDeathAnimation)
-                    transform.GetChild(0).position += Vector3.down * 100;
-                else
-                {
-                    Animator anim = GetComponentInChildren<Animator>();
-                    anim.SetBool("isDead", true);
-                }
             }
         }
     }

@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 350981730}
   - component: {fileID: 350981734}
   - component: {fileID: 1688857045}
+  - component: {fileID: 1306273462}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -509,11 +510,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c807814e8697743b3e82700d6b8efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseyMultiplier: 8
+  mouseyMultiplier: 10
   walkMultiplier: 0.1
   fallMultiplier: 1
-  smooth: 2
+  smooth: 5
   viewmodel_head: {fileID: 7471386082423824677}
+--- !u!114 &1306273462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413694006064418923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656dbbad0e80c534abb57322a3b8aa32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthMax: 100
+  healthCurrent: -1
+  knockback_Multiplier: 1
+  isDead: 0
+  hasDeathAnimation: 0
+  deathCountdown: 5
+  deathCountdown_SpeedModifier: 2
+  deathCountdown_SpeedDuration: 0.5
+  Prop_Weapon: {fileID: 1853999085285571213, guid: 2ed468396f3ff5f4e8247fc79f306b4d, type: 3}
 --- !u!1 &6371564752146858477
 GameObject:
   m_ObjectHideFlags: 0

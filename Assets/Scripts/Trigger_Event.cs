@@ -91,8 +91,8 @@ public class Trigger_Event : MonoBehaviour
                 {
                     Controller_Enemy enemyScript = currentEvent.gameObjects[ii].GetComponent<Controller_Enemy>();
 
-                    if (enemyScript.enemyType != Controller_Enemy.EnemyTypes.Turret) // Is it not a turret? Then don't spawn in.
-                        currentEvent.gameObjects[ii].SetActive(false);
+   
+                   currentEvent.gameObjects[ii].SetActive(false);
 
                     enemyScript.enabled = false; // Force disable
                 }
