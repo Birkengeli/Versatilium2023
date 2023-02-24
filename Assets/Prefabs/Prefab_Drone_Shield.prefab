@@ -240,7 +240,7 @@ MonoBehaviour:
   ConeOfFire: 45
   isInCombat: 0
   Weapon: {fileID: 84993842277374953}
-  BehaviorTags: 5
+  BehaviorTags: 7
   AnimationFlags: 26
   drops: []
   player: {fileID: 0}
