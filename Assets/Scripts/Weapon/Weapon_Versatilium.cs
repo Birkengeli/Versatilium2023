@@ -618,7 +618,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
             {
                 RaycastHit hit;
-                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
+                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
 
                 bool hitSomething = hit.transform != null;
                 bool hitMyself = hit.transform == currentProjectile.userTransform;
@@ -626,7 +626,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
-                bool hitOneWayShield = hitSomething && hit.transform.tag == "One Way Shield" && Vector3.Dot(hit.transform.forward, currentProjectile.velocity.normalized) > 0;
+                bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
 
                 if (hitSomething && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
