@@ -127,9 +127,10 @@ GameObject:
   - component: {fileID: 7305214718437734961}
   - component: {fileID: 5032046035100045255}
   - component: {fileID: 7582054774486425959}
+  - component: {fileID: 7582054774486425960}
   m_Layer: 0
   m_Name: Prefab_Drone
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +150,7 @@ Transform:
   - {fileID: 1698992511289960056}
   - {fileID: 5032046035552547074}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &7305214718437734961
 CapsuleCollider:
@@ -321,10 +322,33 @@ MonoBehaviour:
   isInCombat: 0
   Weapon: {fileID: 5032046035100045255}
   BehaviorTags: 7
+  AnimationFlags: 26
   drops: []
   player: {fileID: 0}
   Sounds: []
   Audio: []
+--- !u!114 &7582054774486425960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7677102074923782606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656dbbad0e80c534abb57322a3b8aa32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthMax: 100
+  healthCurrent: -1
+  knockback_Multiplier: 1
+  isDead: 0
+  deathCountdown: 5
+  deathCountdown_SpeedModifier: 2
+  deathCountdown_SpeedDuration: 0.5
+  UI_Healthbar_Fill: {fileID: 0}
+  UI_POV_Death: {fileID: 0}
+  Prop_Weapon: {fileID: 0}
 --- !u!1001 &2733790831259453291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -526,8 +550,36 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -7685024996583869483, guid: 6853ed7d355e57d4999d859e3b6a448c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2484536994656280704}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6853ed7d355e57d4999d859e3b6a448c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 953304598}
   m_SourcePrefab: {fileID: 100100000, guid: 6853ed7d355e57d4999d859e3b6a448c, type: 3}
+--- !u!1 &4645832764692582125 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6853ed7d355e57d4999d859e3b6a448c, type: 3}
+  m_PrefabInstance: {fileID: 5528231872113570748}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &953304598
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4645832764692582125}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e7936b4e3a2ecd34db554f3ac50f306d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!4 &5418535020366074967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6853ed7d355e57d4999d859e3b6a448c, type: 3}
