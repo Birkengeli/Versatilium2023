@@ -8,6 +8,7 @@ TagManager:
   - Target
   - No Bouncing Projectile
   - Always Bounces Projectile
+  - One Way Shield
   layers:
   - Default
   - TransparentFX
