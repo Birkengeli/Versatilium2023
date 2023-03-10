@@ -30,7 +30,10 @@ public class Trigger_Activator : MonoBehaviour
     public void OnActivation(GameObject projectileVisuals)
     {
         transform.tag = "Untagged";
-        float height = GetComponent<CapsuleCollider>().height;
+
+        CapsuleCollider collider = GetComponent<CapsuleCollider>();
+
+        float height = Mathf.Max(collider.height, collider.radius) / collider.center.y;
 
 
         projectileVisuals = Instantiate(projectileVisuals);
