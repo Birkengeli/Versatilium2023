@@ -129,8 +129,8 @@ public class Trigger_Event : MonoBehaviour
             Events_Trigger(Time.deltaTime);
     }
 
-				private void OnTriggerEnter(Collider other)
-				{
+	private void OnTriggerEnter(Collider other)
+    {
         if (!other.CompareTag("Player"))
             return;
 
@@ -140,7 +140,7 @@ public class Trigger_Event : MonoBehaviour
         boxCollider.enabled = false;
     }
 
-    void Events_Trigger(float timeStep, Transform player = null)
+    public void Events_Trigger(float timeStep, Transform player = null)
     {
         hasBeenTriggered = true;
         timerIsActivated = false;
@@ -149,8 +149,8 @@ public class Trigger_Event : MonoBehaviour
         {
             Event currentEvent = Events[i];
 
-												#region One Time trigger, and delay
-												if (currentEvent.delayInSeconds == -1)
+		    #region One Time trigger, and delay
+			if (currentEvent.delayInSeconds == -1)
                 continue;
 
             if (currentEvent.delayInSeconds > 0)

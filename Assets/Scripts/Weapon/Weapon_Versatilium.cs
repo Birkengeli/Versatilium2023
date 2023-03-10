@@ -621,14 +621,17 @@ public class Weapon_Versatilium : MonoBehaviour
                 Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
 
                 bool hitSomething = hit.transform != null;
+                bool hitTrigger = hitSomething && hit.collider.isTrigger == true;
+                bool hitTheWorld = hitSomething && !hitTrigger;
                 bool hitMyself = hit.transform == currentProjectile.userTransform;
                 bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
                 bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
+                bool hitActivator = hitSomething && hit.transform.tag == "Activator";
 
-                if (hitSomething && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
+                if ((hitTheWorld || hitActivator) && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
 
 
@@ -636,6 +639,13 @@ public class Weapon_Versatilium : MonoBehaviour
                 if (hasImpacted)
                 {
                     OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized, hasGoneFar, transform);
+
+                    if (hitActivator)
+                    {
+                        hit.transform.GetComponent<Trigger_Activator>().OnActivation(currentProjectile.visualTransform.gameObject);
+
+                        unBounceableSurface = true;
+                    }
 
                     if (currentProjectile.remainingBounces > 0 && !unBounceableSurface || bounceableSurface)
                     {
