@@ -61,7 +61,6 @@ public class Weapon_Switching : MonoBehaviour
     [Header("Settings")]
     public WeaponBuildingModes WeaponBuildingMode = WeaponBuildingModes.CoreBased;
     public KeyCode InventoryKey = KeyCode.Tab;
-    public Sound[] sounds;
 
     [Header("Settings - Visuals")]
     public int SlowTimeBy = 10;

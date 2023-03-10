@@ -28,7 +28,6 @@ public class Weapon_Customize : MonoBehaviour
     [Header("Settings")]
     public WeaponBuildingModes WeaponBuildingMode = WeaponBuildingModes.Premade;
     public KeyCode InventoryKey = KeyCode.Tab;
-    public Sound[] sounds;
 
     [Header("Settings - Visuals")]
     public int SlowTimeBy = 10;

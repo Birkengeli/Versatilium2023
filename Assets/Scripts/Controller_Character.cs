@@ -43,7 +43,7 @@ public class Controller_Character : MonoBehaviour
     public KeyCode FreeCamera = KeyCode.F1;
     public float FootstepFrequency = 1;
 
-    Manager_Audio[] Sounds;
+    public Tools_Sound.SoundClip[] soundClips;
 
     Camera camera;
 
@@ -58,6 +58,8 @@ public class Controller_Character : MonoBehaviour
         CapsuleCollider collider = GetComponent<CapsuleCollider>();
 
         characterHeight = Mathf.Max(collider.height, collider.radius * 1);
+
+        Tools_Sound.Start(soundClips, transform);
     }
 
     // Update is called once per frame
@@ -291,7 +293,8 @@ public class Controller_Character : MonoBehaviour
 
         if (footstepCooldown <= 0 && isGrounded)
         {
-            Manager_Audio.Play(Sounds, Sounds_Generic.Footsteps, true);
+            Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.WhileMoving);
+
 
             footstepCooldown += FootstepFrequency;
         }

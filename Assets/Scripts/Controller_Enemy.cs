@@ -75,8 +75,6 @@ public class Controller_Enemy : MonoBehaviour
     public AnimationFlag AnimationFlags;
     public Drop[] drops;
     public Transform player;
-    public Sound[] Sounds;
-    public Manager_Audio[] Audio;
 
 
     Vector3 StartPos;
@@ -85,6 +83,8 @@ public class Controller_Enemy : MonoBehaviour
 
     Animator anim;
     Controller_Character.StatusEffect StatusEffects = Controller_Character.StatusEffect.None;
+
+    public Tools_Sound.SoundClip[] soundClips;
 
     // Start is called before the first frame update
     void Start()
@@ -96,6 +96,7 @@ public class Controller_Enemy : MonoBehaviour
 
         anim = GetComponentInChildren<Animator>();
 
+        Tools_Sound.Start(soundClips, transform);
     }
 
     // Update is called once per frame
@@ -323,7 +324,7 @@ public class Controller_Enemy : MonoBehaviour
 
 
 	#region Lead Shots
-				Vector3 targetPosition_Previous;
+    Vector3 targetPosition_Previous;
 
     Vector3 Target_LeadShot(Vector3 targetPosition_Current, float projectileSpeed) // I believe my inconsistent framerate causes some leading issues.
     {
@@ -506,7 +507,6 @@ public class Controller_Enemy : MonoBehaviour
 
     public void onDeath()
     {
-        Manager_Audio.Play(Audio, Sounds_Turret.OnDeath);
 
         bool hasDeathAnimation = HasFlag((int)AnimationFlags, (int)AnimationFlag.Death);
 
@@ -514,6 +514,8 @@ public class Controller_Enemy : MonoBehaviour
             anim.Play("Death", 0);
         else
             transform.GetChild(0).position += Vector3.down * 100;
+
+        Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnDeath);
 
         foreach (Drop drop in drops)
         {

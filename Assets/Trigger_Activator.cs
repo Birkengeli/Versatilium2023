@@ -21,10 +21,12 @@ public class Trigger_Activator : MonoBehaviour
 
     public Event[] Events;
 
+    public Tools_Sound.SoundClip[] soundClips;
+
     // Update is called once per frame
     void Update()
     {
-        
+        Tools_Sound.Start(soundClips, transform);
     }
 
     public void OnActivation(GameObject projectileVisuals)
@@ -39,6 +41,8 @@ public class Trigger_Activator : MonoBehaviour
         projectileVisuals = Instantiate(projectileVisuals);
         projectileVisuals.transform.parent = transform;
         projectileVisuals.transform.localPosition = Vector3.up * height / 2;
+
+        Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnUse);
 
 
         foreach (Event currentEvent in Events)

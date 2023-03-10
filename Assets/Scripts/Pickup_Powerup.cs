@@ -10,7 +10,6 @@ public class Pickup_Powerup : MonoBehaviour
     public int HealAmount = 100;
     public int pickUpDistance = 2;
 
-    public Sound[] sounds;
     bool isActive;
 
 
@@ -37,7 +36,6 @@ public class Pickup_Powerup : MonoBehaviour
 
     void OnPickup()
     {
-
         Component_Health healthScipt = playerTransform.GetComponent<Component_Health>();
         healthScipt.OnHealing(HealAmount);
 

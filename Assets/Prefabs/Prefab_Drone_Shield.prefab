@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 84993842277374953}
   - component: {fileID: 3296706272586741065}
   - component: {fileID: 3296706272586741062}
+  - component: {fileID: 246644968842319575}
   m_Layer: 0
   m_Name: Prefab_Drone_Shield
   m_TagString: Enemy
@@ -128,11 +129,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 0
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -147,11 +143,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
@@ -173,11 +164,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -192,11 +178,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -214,6 +195,7 @@ MonoBehaviour:
   useVisuals: 1
   projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
   ProjectileScale: 0.1
+  soundClips: []
 --- !u!114 &3296706272586741065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,8 +226,7 @@ MonoBehaviour:
   AnimationFlags: 26
   drops: []
   player: {fileID: 0}
-  Sounds: []
-  Audio: []
+  soundClips: []
 --- !u!114 &3296706272586741062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +249,102 @@ MonoBehaviour:
   UI_Healthbar_Fill: {fileID: 0}
   UI_POV_Death: {fileID: 0}
   Prop_Weapon: {fileID: 0}
+--- !u!82 &246644968842319575
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346761592531043808}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6431612032578966630
 GameObject:
   m_ObjectHideFlags: 0

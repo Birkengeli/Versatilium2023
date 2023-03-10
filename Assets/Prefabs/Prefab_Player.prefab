@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 350981734}
   - component: {fileID: 1688857045}
   - component: {fileID: 1306273462}
+  - component: {fileID: 2049525942}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -264,6 +265,22 @@ MonoBehaviour:
   turnSpeed: 2
   FreeCamera: 282
   FootstepFrequency: 1
+  soundClips:
+  - description: Footsteps
+    soundFlags: 32
+    audioClips: []
+    random: 0
+    volumeSlider: 0.5
+    lastIndex: 0
+    audioSource: {fileID: 0}
+  - description: Dying
+    soundFlags: 4
+    audioClips:
+    - {fileID: 8300000, guid: c9ab8bd63e520154c92ea1c857d666e6, type: 3}
+    random: 0
+    volumeSlider: 0.5
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &350981730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,11 +315,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 0
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -317,11 +329,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
@@ -343,11 +350,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -362,11 +364,6 @@ MonoBehaviour:
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
       bounceCount: 0
-      Audio_OnFire:
-        Turret: 0
-        Generic: 0
-        Weapon: 0
-        audioPath: event:/Character/Enemies/Turret_Small/Turret Retract
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -384,6 +381,7 @@ MonoBehaviour:
   useVisuals: 1
   projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
   ProjectileScale: 0.5
+  soundClips: []
 --- !u!114 &350981734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +400,6 @@ MonoBehaviour:
   coreColor: {fileID: 2100000, guid: f2d4861325060ac4ca7a5f75c275ba0f, type: 2}
   WeaponBuildingMode: 0
   InventoryKey: 9
-  sounds: []
   SlowTimeBy: 10
   tintColor: {r: 0, g: 0, b: 1, a: 0.5254902}
   tintFadeTime: 0.333
@@ -531,11 +528,108 @@ MonoBehaviour:
   healthCurrent: -1
   knockback_Multiplier: 1
   isDead: 0
-  hasDeathAnimation: 0
   deathCountdown: 5
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
+  UI_Healthbar_Fill: {fileID: 0}
+  UI_POV_Death: {fileID: 0}
   Prop_Weapon: {fileID: 1853999085285571213, guid: 2ed468396f3ff5f4e8247fc79f306b4d, type: 3}
+--- !u!82 &2049525942
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413694006064418923}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6371564752146858477
 GameObject:
   m_ObjectHideFlags: 0
