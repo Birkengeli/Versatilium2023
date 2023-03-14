@@ -276,13 +276,13 @@ public class Weapon_Switching : MonoBehaviour
 
             if (!unEquip)
             {
-                weaponScript.WeaponStats.Primary.PelletCount += pelletIncrease;
-                weaponScript.WeaponStats.Primary.Deviation += deviationIncrease;
+                weaponScript.WeaponStats.PelletCount += pelletIncrease;
+                weaponScript.WeaponStats.Deviation += deviationIncrease;
             }
             else
             {
-                weaponScript.WeaponStats.Primary.PelletCount -= pelletIncrease;
-                weaponScript.WeaponStats.Primary.Deviation -= deviationIncrease;
+                weaponScript.WeaponStats.PelletCount -= pelletIncrease;
+                weaponScript.WeaponStats.Deviation -= deviationIncrease;
             }
 
             return;
@@ -292,15 +292,32 @@ public class Weapon_Switching : MonoBehaviour
 
             if (!unEquip)
             {
-                weaponScript.WeaponStats.Primary.bounceCount += 1;
+                weaponScript.WeaponStats.bounceCount += 1;
             }
             else
             {
-                weaponScript.WeaponStats.Primary.bounceCount -= 1;
+                weaponScript.WeaponStats.bounceCount -= 1;
             }
 
             return;
         }
+
+        if (name == "Teleport")
+        {
+            weaponScript.WeaponStats.canTeleportUser = !unEquip;
+
+            return;
+        }
+
+        if (name == "Recoil+")
+        {
+            float recoilBoost = -(5f / 3);
+            weaponScript.WeaponStats.knockback_self += recoilBoost * (unEquip ? -1 : 1);
+
+            return;
+        }
+
+        Debug.LogError("Could not find '" + name + "'.");
     }
 
     #region Tools

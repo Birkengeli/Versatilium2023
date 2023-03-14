@@ -29,7 +29,7 @@ public class Trigger_Activator : MonoBehaviour
         Tools_Sound.Start(soundClips, transform);
     }
 
-    public void OnActivation(GameObject projectileVisuals)
+    public void OnActivation(GameObject projectileVisuals, float originalScale)
     {
         transform.tag = "Untagged";
 
@@ -39,8 +39,10 @@ public class Trigger_Activator : MonoBehaviour
 
 
         projectileVisuals = Instantiate(projectileVisuals);
+        projectileVisuals.transform.localScale = Vector3.one * originalScale;
         projectileVisuals.transform.parent = transform;
         projectileVisuals.transform.localPosition = Vector3.up * height / 2;
+
 
         Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnUse);
 

@@ -214,7 +214,7 @@ public class Controller_Enemy : MonoBehaviour
         Vector3 targetPosition = player.position;
 
         if (isLeadingTarget)
-            targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
+            targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
 
 
 
@@ -245,7 +245,7 @@ public class Controller_Enemy : MonoBehaviour
 
             // I need to fire the Versatilium not using look, but look + angle offset
 
-            Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);
+            Weapon.OnFire(Weapon_Versatilium.TriggerFlags.SemiAutomatic);
 
         }
 

@@ -296,79 +296,27 @@ MonoBehaviour:
   debugMode: 1
   canFire: 1
   WeaponStats:
-    triggerType: 1
-    firesInBurst: 0
+    triggerTypes: 1
     burstCount: 3
     burst_fireRate: 4
     burstCounter: 0
-    Primary:
-      ProjectileType: 1
-      damage: 40
-      knockback: 10
-      fireRate: 2
-      PelletCount: 1
-      Deviation: 0.01
-      knockback_self: 0
-      inheritUserVelocity: 0
-      targetSeekingStrength: 0
-      distanceBeforeDamageDrop: 50
-      Projectile_Speed: 25
-      Projectile_Gravity: 0
-      bounceCount: 0
-    Secondary:
-      ProjectileType: 0
-      damage: 10
-      knockback: 10
-      fireRate: 2
-      PelletCount: 1
-      Deviation: 0.01
-      knockback_self: 0
-      inheritUserVelocity: 1
-      targetSeekingStrength: 0
-      distanceBeforeDamageDrop: 20
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      bounceCount: 0
-    characterController: {fileID: 0}
-  WeaponStats_Alt:
-    triggerType: 1
-    firesInBurst: 0
-    burstCount: 3
-    burst_fireRate: 4
-    burstCounter: 0
-    Primary:
-      ProjectileType: 0
-      damage: 10
-      knockback: 10
-      fireRate: 2
-      PelletCount: 1
-      Deviation: 0.01
-      knockback_self: 0
-      inheritUserVelocity: 1
-      targetSeekingStrength: 0
-      distanceBeforeDamageDrop: 20
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      bounceCount: 0
-    Secondary:
-      ProjectileType: 0
-      damage: 10
-      knockback: 10
-      fireRate: 2
-      PelletCount: 1
-      Deviation: 0.01
-      knockback_self: 0
-      inheritUserVelocity: 1
-      targetSeekingStrength: 0
-      distanceBeforeDamageDrop: 20
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      bounceCount: 0
+    ProjectileType: 1
+    damage: 40
+    knockback: 10
+    fireRate: 2
+    PelletCount: 1
+    Deviation: 0.01
+    knockback_self: 0
+    inheritUserVelocity: 0
+    targetSeekingStrength: 0
+    distanceBeforeDamageDrop: 20
+    Projectile_Speed: 25
+    Projectile_Gravity: 0
+    canTeleportUser: 0
+    bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
-  triggerType: 1
-  triggerType_Secondary: 4
   Charge_minimumTime: 0.1
   Charge_maximumTime: 1
   User_POV: {fileID: 0}
@@ -438,7 +386,7 @@ MonoBehaviour:
 
       No strengths, but also no disadvantages.'
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 2bb4e96f5d0b02c468932d665a015c54, type: 3}
     storedIndexes: 
   - name: Burst
     moduleSlot: 0
@@ -448,14 +396,6 @@ MonoBehaviour:
       burst.
     coreColor: {r: 0, g: 0, b: 0, a: 1}
     Icon: {fileID: 56064797, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
-    storedIndexes: 
-  - name: Debug
-    moduleSlot: 0
-    state: 0
-    allowDuplicates: 0
-    description: This is for testing purposes only.
-    coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 0}
     storedIndexes: 
   - name: Single Shot
     moduleSlot: 0
@@ -489,6 +429,22 @@ MonoBehaviour:
     description: This blinks you to the location of impact.
     coreColor: {r: 0, g: 0, b: 0, a: 1}
     Icon: {fileID: 963988052, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+    storedIndexes: 
+  - name: Recoil+
+    moduleSlot: 0
+    state: 2
+    allowDuplicates: 0
+    description: Greatly increases recoil
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    Icon: {fileID: 0}
+    storedIndexes: 
+  - name: Debug
+    moduleSlot: 0
+    state: 0
+    allowDuplicates: 0
+    description: This is for testing purposes only.
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    Icon: {fileID: 0}
     storedIndexes: 
   UI_Cores:
   - {fileID: 0}
