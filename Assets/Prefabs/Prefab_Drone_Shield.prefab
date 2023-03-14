@@ -114,7 +114,7 @@ MonoBehaviour:
     burstCount: 3
     burst_fireRate: 4
     burstCounter: 0
-    ProjectileType: 0
+    ProjectileType: 1
     damage: 34
     knockback: 10
     fireRate: 2
@@ -127,6 +127,8 @@ MonoBehaviour:
     Projectile_Speed: 25
     Projectile_Gravity: 9.807
     canTeleportUser: 0
+    counterProjectile: 0
+    isExplosive: 0
     bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323

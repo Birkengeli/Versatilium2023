@@ -313,6 +313,8 @@ MonoBehaviour:
     Projectile_Speed: 25
     Projectile_Gravity: 0
     canTeleportUser: 0
+    counterProjectile: 0
+    isExplosive: 0
     bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323
@@ -434,7 +436,26 @@ MonoBehaviour:
     moduleSlot: 0
     state: 2
     allowDuplicates: 0
-    description: Greatly increases recoil
+    description: 'Greatly increases recoil.
+
+      You might be able to reach new
+      areas with this.'
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    Icon: {fileID: 0}
+    storedIndexes: 
+  - name: Anti-Projectile
+    moduleSlot: 0
+    state: 2
+    allowDuplicates: 2
+    description: Shoots down other projectiles
+    coreColor: {r: 0, g: 0, b: 0, a: 1}
+    Icon: {fileID: 0}
+    storedIndexes: 
+  - name: Explosive Impact
+    moduleSlot: 0
+    state: 2
+    allowDuplicates: 2
+    description: Explode in an AOE for half the damage.
     coreColor: {r: 0, g: 0, b: 0, a: 1}
     Icon: {fileID: 0}
     storedIndexes: 

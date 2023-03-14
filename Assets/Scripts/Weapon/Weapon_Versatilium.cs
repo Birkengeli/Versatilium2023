@@ -57,6 +57,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         [Header("Misc.")]
         public bool teleportUser;
+        public bool isExplosive;
     }
 
     [System.Serializable]
@@ -89,6 +90,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
         [Header("Misc.")]
         public bool canTeleportUser;
+        public bool counterProjectile;
+        public bool isExplosive;
 
         // public bool deleteProjectileOnImpact = true;
         public int bounceCount = 0;
@@ -348,7 +351,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     Projectiles.Add(currentProjectile);
 
-                    OnHit(currentStats, hit.point, Mathf.Clamp(2f - (hit.distance / currentStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward, false, transform);
+                    OnHit(currentStats.damage, hit.point, Mathf.Clamp(2f - (hit.distance / currentStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward, currentStats.knockback, false, transform);
 
                     Vector3 bounceOrigin = laserPoint;
                     Vector3 bounceDirection = Vector3.Reflect(rayDirection, hit.normal);
@@ -444,6 +447,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
                 currentProjectile.projectileStats = currentStats;
                 currentProjectile.remainingBounces = currentStats.bounceCount;
+                currentProjectile.isExplosive = currentStats.isExplosive;
 
                 if((!isMultiPellet && !isBurstFire) || (isMultiPellet && i == 0) || (isBurstFire && currentStats.burstCounter == 0)) // Applies on-hit
                 {
@@ -451,8 +455,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 }
 
 
-
-                if(currentStats.inheritUserVelocity)
+                if (currentStats.inheritUserVelocity)
 				{
                     if (isWieldedByPlayer)
                     {
@@ -468,6 +471,12 @@ public class Weapon_Versatilium : MonoBehaviour
                     currentProjectile.visualTransform = Instantiate(projectilePrefab).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
                     currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale;
+                }
+
+                if (currentStats.counterProjectile)
+                {
+                    currentProjectile.visualTransform.AddComponent<SphereCollider>().isTrigger = true;
+                    currentProjectile.visualTransform.tag = "AntiProjectile";
                 }
 
                 Projectiles.Add(currentProjectile);
@@ -490,11 +499,11 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void OnHit(WeaponStatistics projectileStats, Vector3 impactPosition, float distanceModifier, Vector3 knockBack, bool canHitMyself, Transform myself) // i want to skip this step at some point.
+    void OnHit(float damage, Vector3 impactPosition, float distanceModifier, Vector3 knockBack, float knockbackStrength, bool canHitMyself, Transform myself, float radius = 0.01f) // i want to skip this step at some point.
     {
 
 
-        Collider[] hits = Physics.OverlapSphere(impactPosition, 0.01f);
+        Collider[] hits = Physics.OverlapSphere(impactPosition, radius);
 
         for (int i = 0; i < hits.Length; i++)
         {
@@ -509,9 +518,9 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (hitPlayer || hitEnemy)
             {
-                int damage = Mathf.RoundToInt((projectileStats.damage * distanceModifier) / projectileStats.PelletCount);
+                damage = Mathf.RoundToInt(damage * distanceModifier);
 
-                Component_Health.Get(currentHit).OnTakingDamage(damage, (knockBack * projectileStats.knockback * distanceModifier) / projectileStats.PelletCount);
+                Component_Health.Get(currentHit).OnTakingDamage((int)damage, knockBack * knockbackStrength * distanceModifier);
             }
 
 
@@ -620,15 +629,18 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
                 bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
                 bool hitActivator = hitSomething && hit.transform.tag == "Activator";
+                bool hitAntiProjectile = hitTrigger && hit.transform.tag == "AntiProjectile";
 
-                if ((hitTheWorld || hitActivator) && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
+                if (hitAntiProjectile)
+                    bounceableSurface = true;
+
+                if ((hitTheWorld || hitActivator || hitAntiProjectile) && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
                     hasImpacted = true;
-
-
 
                 if (hasImpacted)
                 {
-                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized, hasGoneFar, transform);
+                    float pellets = currentProjectile.projectileStats.PelletCount;
+                    OnHit(currentProjectile.projectileStats.damage / pellets, hit.point, distanceScale, currentProjectile.velocity.normalized, currentProjectile.projectileStats.knockback / pellets, hasGoneFar, transform);
 
                     if (hasVisuals && hitActivator)
                     {
@@ -680,7 +692,16 @@ public class Weapon_Versatilium : MonoBehaviour
 
         #region Destruction
 
-        if (currentProjectile.toBeDestroyed && hasImpacted && currentProjectile.teleportUser && false) //  teleport module.
+        if (currentProjectile.toBeDestroyed && currentProjectile.isExplosive)
+        {
+            GameObject explosiveEffect = Instantiate(currentProjectile.visualTransform).gameObject;
+            explosiveEffect.transform.localScale *= 2;
+            explosiveEffect.AddComponent<Temp_ExplosiveEffect>();
+
+            OnHit(currentProjectile.projectileStats.damage / 2, currentProjectile.position, 1, currentProjectile.velocity.normalized, currentProjectile.projectileStats.knockback, true, transform, currentProjectile.visualTransform.localScale.magnitude * 2);
+        }
+
+        if (currentProjectile.toBeDestroyed && hasImpacted && currentProjectile.teleportUser) //  teleport module.
         {
             Vector3 positionOffset = Vector3.zero;
             Vector3 playerOffset = Vector3.up * currentProjectile.userTransform.GetComponent<CapsuleCollider>().height / 2;

@@ -1102,6 +1102,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7677102074923782606, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: m_Name
       value: Prefab_Drone
@@ -1163,9 +1167,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 84993842277374953, guid: 8e80f672c041f3842aedec145cd2bed7, type: 3}
+      propertyPath: WeaponStats.triggerTypes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 84993842277374953, guid: 8e80f672c041f3842aedec145cd2bed7, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3346761592531043808, guid: 8e80f672c041f3842aedec145cd2bed7, type: 3}
       propertyPath: m_Name
       value: Prefab_Drone_Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346761592531043808, guid: 8e80f672c041f3842aedec145cd2bed7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3412537634337926433, guid: 8e80f672c041f3842aedec145cd2bed7, type: 3}
       propertyPath: m_RootOrder

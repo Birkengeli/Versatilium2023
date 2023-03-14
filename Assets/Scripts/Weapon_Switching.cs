@@ -317,7 +317,24 @@ public class Weapon_Switching : MonoBehaviour
             return;
         }
 
-        Debug.LogError("Could not find '" + name + "'.");
+        if (name == "Anti-Projectile")
+        {
+            float radius = weaponScript.ProjectileScale;
+            weaponScript.WeaponStats.counterProjectile = !unEquip;
+
+            return;
+        }
+
+        if (name == "Explosive Impact")
+        {
+            float radius = weaponScript.ProjectileScale;
+            weaponScript.WeaponStats.isExplosive = !unEquip;
+
+            return;
+        }
+
+
+        Debug.LogWarning("Could not find '" + name + "'.");
     }
 
     #region Tools
