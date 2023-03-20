@@ -353,7 +353,7 @@ MonoBehaviour:
   SlowTimeBy: 10
   tintColor: {r: 0, g: 0, b: 1, a: 0.5254902}
   tintFadeTime: 0.333
-  missingIcon: {fileID: 21300000, guid: 626b9cddb29049e4cac50cd87b419945, type: 3}
+  missingIcon: {fileID: 21300000, guid: f9161c6c9e06dc445ada3ee16d991f90, type: 3}
   allowDuplicates: 1
   Modules:
   - name: Electric
@@ -388,7 +388,7 @@ MonoBehaviour:
 
       No strengths, but also no disadvantages.'
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 21300000, guid: 2bb4e96f5d0b02c468932d665a015c54, type: 3}
+    Icon: {fileID: 1696222504, guid: 66a21f1fce38af04392c9ed45eaa672e, type: 3}
     storedIndexes: 
   - name: Burst
     moduleSlot: 0
@@ -414,7 +414,7 @@ MonoBehaviour:
     allowDuplicates: 0
     description: This subcore allows shots to bounce off wall once.
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: -1000106602, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+    Icon: {fileID: -314789028, guid: 66a21f1fce38af04392c9ed45eaa672e, type: 3}
     storedIndexes: 
   - name: Shotgun
     moduleSlot: 0
@@ -430,7 +430,7 @@ MonoBehaviour:
     allowDuplicates: 2
     description: This blinks you to the location of impact.
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 963988052, guid: 6747a765bd48f6446aa0de216cd236b3, type: 3}
+    Icon: {fileID: -873619553, guid: 66a21f1fce38af04392c9ed45eaa672e, type: 3}
     storedIndexes: 
   - name: Recoil+
     moduleSlot: 0
@@ -441,7 +441,7 @@ MonoBehaviour:
       You might be able to reach new
       areas with this.'
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 0}
+    Icon: {fileID: -944793503, guid: 66a21f1fce38af04392c9ed45eaa672e, type: 3}
     storedIndexes: 
   - name: Anti-Projectile
     moduleSlot: 0
@@ -449,7 +449,7 @@ MonoBehaviour:
     allowDuplicates: 2
     description: Shoots down other projectiles
     coreColor: {r: 0, g: 0, b: 0, a: 1}
-    Icon: {fileID: 0}
+    Icon: {fileID: 1093812983, guid: 66a21f1fce38af04392c9ed45eaa672e, type: 3}
     storedIndexes: 
   - name: Explosive Impact
     moduleSlot: 0
