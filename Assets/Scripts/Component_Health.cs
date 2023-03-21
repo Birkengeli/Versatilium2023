@@ -101,7 +101,7 @@ public class Component_Health : MonoBehaviour
 
             if (isPlayer)
             {
-                playerScript.velocity = knockBack;
+                playerScript.velocity = knockBack + Vector3.up * 0.1f;
       
                     
 
@@ -115,7 +115,7 @@ public class Component_Health : MonoBehaviour
 
 
 
-                enemyScript.velocity += knockBack * knockback_Multiplier;
+                enemyScript.velocity += (knockBack + Vector3.up * 1f) * knockback_Multiplier;
 
                 if (!enemyScript.isInCombat)
                 {
