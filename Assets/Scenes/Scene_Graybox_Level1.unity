@@ -656,6 +656,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833487251}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: BehaviorTags
       value: 5
@@ -1882,6 +1890,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833487251}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: BehaviorTags
       value: 5
@@ -2666,6 +2682,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833487251}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: BehaviorTags
       value: 5
@@ -7621,6 +7645,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 366648910}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: moveSpeed
       value: 0
@@ -7840,6 +7872,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1353746936}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: moveSpeed
       value: 0
@@ -16539,6 +16579,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1353746936}
     m_Modifications:
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.Deviation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5032046035100045255, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
+      propertyPath: WeaponStats.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7582054774486425959, guid: c8098cf3ffb67ae43ac71e76ce1411a0, type: 3}
       propertyPath: moveSpeed
       value: 0
