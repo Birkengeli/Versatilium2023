@@ -505,9 +505,13 @@ public class Weapon_Versatilium : MonoBehaviour
 
         Collider[] hits = Physics.OverlapSphere(impactPosition, radius);
 
+     
+
         for (int i = 0; i < hits.Length; i++)
         {
             Transform currentHit = hits[i].transform;
+
+            Debug.Log(currentHit.name);
 
             bool hitPlayer = currentHit.CompareTag("Player");
             bool hitEnemy = currentHit.CompareTag("Enemy");
@@ -627,14 +631,14 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
-                bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
+                bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) < 0;
                 bool hitActivator = hitSomething && hit.transform.tag == "Activator";
                 bool hitAntiProjectile = hitTrigger && hit.transform.tag == "AntiProjectile";
 
                 if (hitAntiProjectile)
                     bounceableSurface = true;
 
-                if ((hitTheWorld || hitActivator || hitAntiProjectile) && (!hitMyself || hasGoneFar) && !hitOneWayShield) // If it hit something AND it didn't hitmyself OR it has goen far enough
+                if ((hitTheWorld || hitActivator || hitAntiProjectile || hitOneWayShield) && (!hitMyself || hasGoneFar)) // If I hit any of these AND I did NOT hit any of those.
                     hasImpacted = true;
 
                 if (hasImpacted)
