@@ -303,13 +303,6 @@ public class Controller_Enemy : MonoBehaviour
         bool isWalking = currentSpeed > 0.1f;
         bool onWalking = isWalking && previousSpeed <= 0.1f;
 
-
-        if (onIdle)
-            print("OnIdle");
-
-        if (onWalking)
-            print("onWalking");
-
         bool canWalk = HasFlag((int)AnimationFlags, (int)AnimationFlag.Walking);
         bool hasIdle = HasFlag((int)AnimationFlags, (int)AnimationFlag.Idle);
 
@@ -492,7 +485,7 @@ public class Controller_Enemy : MonoBehaviour
 
             bool hitValidTarget = hit2.transform != null && hit2.transform != transform;
 
-            if (distanceToStartPos > wanderDistanceMax)         // It's not in LoS from start pos
+            if (distanceToStartPos > wanderDistanceMax && false)         // It's not in LoS from start pos // This caused a near-infinite loop.
                 endPosition = WanderThowards(currentPos, desiredDistance); // Then try again
         }
 
