@@ -110,7 +110,7 @@ public class Controller_Enemy : MonoBehaviour
         float distanceToTarget = directionToTarget.magnitude;
 
         RaycastHit hit;
-        Physics.Raycast(transform.position, (targetPosition - transform.position).normalized, out hit, DetectionRange + 0.1f);
+        Physics.Raycast(transform.position, (targetPosition - transform.position).normalized, out hit, DetectionRange + 0.1f, ~new LayerMask(), QueryTriggerInteraction.Ignore);
 
         bool canSeeTarget = hit.transform != null && hit.transform.tag == "Player";
         bool hasDetectedTarget = distanceToTarget <= DetectionRange;
