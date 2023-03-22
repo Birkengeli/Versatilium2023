@@ -312,8 +312,10 @@ public class Weapon_Switching : MonoBehaviour
         if (name == "Recoil+")
         {
             float recoilBoost = -(5f / 3);
-            weaponScript.WeaponStats.knockback_self += recoilBoost * (unEquip ? -1 : 1);
-            weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1) * 2;
+            float knockbackBoost = -(15f / 3);
+
+            weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
+            weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
 
             return;
         }
