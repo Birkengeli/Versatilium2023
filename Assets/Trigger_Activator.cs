@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using UnityEngine;
 
 public class Trigger_Activator : MonoBehaviour
@@ -41,7 +40,7 @@ public class Trigger_Activator : MonoBehaviour
         projectileVisuals = Instantiate(projectileVisuals);
         projectileVisuals.transform.localScale = Vector3.one * originalScale;
         projectileVisuals.transform.parent = transform;
-        projectileVisuals.transform.localPosition = Vector3.up * height / 2;
+        projectileVisuals.transform.localPosition = Vector3.up * collider.center.y;
 
 
         Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnUse);
