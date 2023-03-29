@@ -27,6 +27,7 @@ public class Controller_Enemy : MonoBehaviour
         canAttack = 1 << 2,
         isInvincible = 1 << 3,
         hasAirControl = 1 << 1 | 1 << 4,
+        canNotBeKnockedBack = 1 << 5,
     }
 
     [System.Flags]
@@ -104,22 +105,13 @@ public class Controller_Enemy : MonoBehaviour
     {
         float timeStep = Time.deltaTime;
 
-        Vector3 targetPosition = player.position;
-        Vector3 directionToTarget = targetPosition - transform.position;
-
-        float distanceToTarget = directionToTarget.magnitude;
-
-        RaycastHit hit;
-        Physics.Raycast(transform.position, (targetPosition - transform.position).normalized, out hit, DetectionRange + 0.1f, ~new LayerMask(), QueryTriggerInteraction.Ignore);
-
-        bool canSeeTarget = hit.transform != null && hit.transform.tag == "Player";
-        bool hasDetectedTarget = distanceToTarget <= DetectionRange;
+        bool canSeePlayer = CanSeeTarget(player, false);
 
         if (BehaviorStates == BehaviorState.Idle)
         {
-            whileIdle(timeStep, hasDetectedTarget && canSeeTarget);
+            whileIdle(timeStep, canSeePlayer);
 
-            if (hasDetectedTarget && canSeeTarget) // On Idle
+            if (canSeePlayer) // On Idle
             {
                 BehaviorStates = BehaviorState.Reacting;
             }
@@ -142,7 +134,7 @@ public class Controller_Enemy : MonoBehaviour
             whileInCombat(timeStep, false);
 
 
-            if (!canSeeTarget) // On Searching
+            if (!canSeePlayer) // On Searching
             {
                 BehaviorStates = BehaviorState.Searching;
                 timer = rememberPlayerFor;
@@ -156,12 +148,12 @@ public class Controller_Enemy : MonoBehaviour
 
             whileSearching(timeStep);
 
-            if (canSeeTarget) // On Returning to Active
+            if (canSeePlayer) // On Returning to Active
             {
                 BehaviorStates = BehaviorState.InCombat;
             }
 
-            if (!canSeeTarget && timer < 0) // On retracting
+            if (!canSeePlayer && timer < 0) // On retracting
             {
                 BehaviorStates = BehaviorState.ReturningToIdle;
                 timer = ReactionTime;
@@ -172,7 +164,7 @@ public class Controller_Enemy : MonoBehaviour
         {
             timer -= timeStep;
 
-            if (!canSeeTarget && timer < 0) // on Sleep
+            if (timer < 0) // on Sleep
             {
                 BehaviorStates = BehaviorState.Idle;
                 timer = 0;
@@ -522,6 +514,35 @@ public class Controller_Enemy : MonoBehaviour
             }
         }
 
+    }
+
+    bool CanSeeTarget(Transform target, bool mustBeUnobstructed)
+    {
+        Vector3 targetPosition = target.position;
+        Vector3 directionToTarget = targetPosition - transform.position;
+
+        float distanceToTarget = directionToTarget.magnitude;
+
+        if (distanceToTarget > DetectionRange)
+            return false;
+
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, (targetPosition - transform.position).normalized, distanceToTarget, ~new LayerMask(), QueryTriggerInteraction.Ignore);
+
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Transform currentTransform = hits[i].transform;
+
+            bool isTarget = currentTransform == target;
+            bool isOneWayShield = !mustBeUnobstructed && currentTransform.tag == "One Way Shield";
+            bool isWorld = !isTarget && !isOneWayShield;
+
+            if (isWorld)
+                return false;
+
+        }
+
+        return true;
     }
 
     #region Tools
