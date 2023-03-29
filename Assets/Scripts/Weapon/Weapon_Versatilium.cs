@@ -621,7 +621,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
             {
                 RaycastHit hit;
-                Physics.SphereCast(currentProjectile.position, ProjectileScale, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
+                Physics.SphereCast(currentProjectile.position, ProjectileScale / 2, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
 
                 bool hitSomething = hit.transform != null;
                 bool hitTrigger = hitSomething && hit.collider.isTrigger == true;
@@ -659,7 +659,7 @@ public class Weapon_Versatilium : MonoBehaviour
                             currentProjectile.remainingBounces--;
                         hasImpacted = false;
 
-                        currentProjectile.position = hit.point; // Reset from the wall where it bounced;
+                        currentProjectile.position = hit.point + (hit.normal * ProjectileScale / 2); // Makes sure the projectile bounces from the correct position.; // Reset from the wall where it bounced;
 
                         Vector3 reflectedVelocity = Vector3.Reflect(currentProjectile.velocity, hit.normal);
 
