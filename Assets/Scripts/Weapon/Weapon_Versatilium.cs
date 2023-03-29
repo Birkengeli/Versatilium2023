@@ -621,7 +621,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
             {
                 RaycastHit hit;
-                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
+                Physics.SphereCast(currentProjectile.position, ProjectileScale, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
 
                 bool hitSomething = hit.transform != null;
                 bool hitTrigger = hitSomething && hit.collider.isTrigger == true;
