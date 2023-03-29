@@ -179,6 +179,14 @@ public class Controller_Enemy : MonoBehaviour
         Animation(timeStep);
 
         velocity_LastFrame = velocity;
+
+
+        if (transform.position.y < -100)
+        {
+            Debug.LogError("An enemy fell out of the map and was automaticaly killed and disabled. ('" + transform.name + "' at position " + StartPos + ")");
+            onDeath();
+            gameObject.SetActive(false);
+        }
     }
 
     Vector3 velocity_LastFrame;
