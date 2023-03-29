@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
+using UnityEngine.XR;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
@@ -434,9 +435,14 @@ public class Weapon_Versatilium : MonoBehaviour
                 Vector3 rayOrigin = User_POV.position;
                 Vector3 rayDirection = User_POV.forward + rayDeviation;
 
+                GetComponent<Collider>().isTrigger = true; // I keep hitting myself.
+
                 RaycastHit hit;
-                Physics.Raycast(rayOrigin, rayDirection, out hit);
+                Physics.Raycast(rayOrigin, rayDirection, out hit, Mathf.Infinity, ~new LayerMask(), QueryTriggerInteraction.Ignore);
                 Vector3 projectileDirection = hit.transform != null ? ( hit.point - Origin_Barrel.position).normalized : (rayDirection);
+
+                GetComponent<Collider>().isTrigger = false;
+
 
                 Projectile currentProjectile = new Projectile();
                 currentProjectile.userTransform = transform;
