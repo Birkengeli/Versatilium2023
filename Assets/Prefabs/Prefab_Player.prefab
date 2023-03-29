@@ -255,9 +255,9 @@ MonoBehaviour:
   StatusEffects: 0
   speed: 5
   friction: 10
-  sprintSpeedModifier: 2
+  sprintSpeedModifier: 1.7
   jumpHeight: 2
-  hasAirControl: 0
+  hasAirControl: 1
   velocity: {x: 0, y: 0, z: 0}
   gravity: 9.81
   terminalVelocity: 80.55
