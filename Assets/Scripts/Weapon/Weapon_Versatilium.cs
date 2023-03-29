@@ -631,14 +631,14 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
-                bool hitOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) < 0;
+                bool hitThroughOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
                 bool hitActivator = hitSomething && hit.transform.tag == "Activator";
                 bool hitAntiProjectile = hitTrigger && hit.transform.tag == "AntiProjectile";
 
                 if (hitAntiProjectile)
                     bounceableSurface = true;
 
-                if ((hitTheWorld || hitActivator || hitAntiProjectile || hitOneWayShield) && (!hitMyself || hasGoneFar)) // If I hit any of these AND I did NOT hit any of those.
+                if ((hitTheWorld || hitActivator || hitAntiProjectile) && (!hitMyself || hasGoneFar) && !hitThroughOneWayShield) // If I hit any of these AND I did NOT hit any of those.
                     hasImpacted = true;
 
                 if (hasImpacted)
