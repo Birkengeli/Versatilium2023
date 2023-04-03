@@ -293,6 +293,8 @@ public class Weapon_Versatilium : MonoBehaviour
         if(gunParticles != null)
             gunParticles.Play();
 
+        Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnUse);
+
 
         if (isWieldedByPlayer)
         {

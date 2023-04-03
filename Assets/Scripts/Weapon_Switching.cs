@@ -225,7 +225,7 @@ public class Weapon_Switching : MonoBehaviour
         }
     }
 
-    bool GetNextAvailableModule(int currentIndex, bool reverse, Module.ModuleSlots slotType, out int nextIndex, out Module nextModule)
+    public bool GetNextAvailableModule(int currentIndex, bool reverse, Module.ModuleSlots slotType, out int nextIndex, out Module nextModule)
     {
         for (int i = 0; i < Modules.Length; i++)
         {
@@ -337,7 +337,7 @@ public class Weapon_Switching : MonoBehaviour
         }
 
 
-        Debug.LogWarning("Could not find '" + name + "'.");
+        Debug.Log("Could not find '" + name + "'.");
     }
 
     #region Tools

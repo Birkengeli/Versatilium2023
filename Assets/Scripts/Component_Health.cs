@@ -102,8 +102,8 @@ public class Component_Health : MonoBehaviour
             if (isPlayer)
             {
                 playerScript.velocity = knockBack + Vector3.up * 0.1f;
-      
-                    
+                playerScript.OnHit(false);
+
 
             }
 
@@ -137,10 +137,13 @@ public class Component_Health : MonoBehaviour
             UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
         }
 
-        if (!isDead && healthCurrent <= 0)
-            WhileDead(true); // On Death
-        
+        bool onDeath = !isDead && healthCurrent <= 0;
 
+        if (onDeath)
+            WhileDead(true); // On Death
+
+        if(!isDead || onDeath)
+            playerScript.OnHit(onDeath);
     }
 
     public static Component_Health Get(Transform target)
@@ -159,8 +162,12 @@ public class Component_Health : MonoBehaviour
 
         if (isPlayer)
         {
+            
+
             if (onDeath)
             {
+             
+
                 healthCurrent = 0;
                 deathCountdown_Timer = 0;
 

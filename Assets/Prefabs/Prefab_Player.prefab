@@ -267,9 +267,10 @@ MonoBehaviour:
   FootstepFrequency: 1
   soundClips:
   - description: Footsteps
-    soundFlags: 32
-    audioClips: []
-    random: 0
+    soundFlags: 64
+    audioClips:
+    - {fileID: 8300000, guid: 97bc8c4f8d4459d4099a2a57bf448242, type: 3}
+    random: 1
     volumeSlider: 0.5
     lastIndex: 0
     audioSource: {fileID: 0}
@@ -277,6 +278,14 @@ MonoBehaviour:
     soundFlags: 4
     audioClips:
     - {fileID: 8300000, guid: c9ab8bd63e520154c92ea1c857d666e6, type: 3}
+    random: 0
+    volumeSlider: 0.5
+    lastIndex: 0
+    audioSource: {fileID: 0}
+  - description: Taking Damage
+    soundFlags: 2
+    audioClips:
+    - {fileID: 8300000, guid: 4873f24387e172640bb7c4e33df47808, type: 3}
     random: 0
     volumeSlider: 0.5
     lastIndex: 0
@@ -331,7 +340,17 @@ MonoBehaviour:
   useVisuals: 1
   projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
   ProjectileScale: 0.5
-  soundClips: []
+  soundClips:
+  - description: Shooting
+    soundFlags: 8
+    audioClips:
+    - {fileID: 8300000, guid: ec1cd9653fffef2439ff23de84d33819, type: 3}
+    - {fileID: 8300000, guid: 2032bd4ce8ce8904d8acc21ac3987761, type: 3}
+    - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
+    random: 1
+    volumeSlider: 0.5
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &350981734
 MonoBehaviour:
   m_ObjectHideFlags: 0

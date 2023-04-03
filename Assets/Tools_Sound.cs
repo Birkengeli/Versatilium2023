@@ -13,15 +13,21 @@ public class Tools_Sound : MonoBehaviour
         None = 0 << 0,
 
         // Combat / Damage
+        OnCombat = 1 << 9,
         OnHit = 1 << 1,
+        OnHitInvincible = 1 << 7,
         OnDeath = 1 << 2,
 
         // Interaction / Shooting
         OnUse = 1 << 3,
-        OnAltFire = 1 << 4,
+        OnFire = 1 << 4,
+        OnAltFire = 1 << 5,
 
         // Movement
-        WhileMoving = 1 << 5,
+        WhileMoving = 1 << 6,
+        WhileIdle = 1 << 8,
+
+
     }
 
     public enum randomTypes

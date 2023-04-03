@@ -14,8 +14,7 @@ public class Weapon_Customize : MonoBehaviour
 
     #endregion
 
-
-
+    public bool isInDebugMode;
     Controller_Character playerScript;
 				Weapon_Versatilium weaponScript;
     Weapon_Arsenal arsenalScript;
@@ -230,6 +229,7 @@ public class Weapon_Customize : MonoBehaviour
             if (currentTransform.name == name)
                 return currentTransform;
         }
+
         Debug.LogWarning("Error, could not find '" + name + "'.");
 
         return null;

@@ -80,13 +80,6 @@ public class Controller_Character : MonoBehaviour
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
 
-
-        if (Input.GetKeyDown(KeyCode.X))
-            Time.timeScale = 1f / 10;
-
-        if (Input.GetKeyUp(KeyCode.X))
-            Time.timeScale = 1f;
-
     }
 
     public void ApplyStatusEffect(StatusEffect effect, bool removeEffectInstead = false)
@@ -309,6 +302,19 @@ public class Controller_Character : MonoBehaviour
         Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, distanceToGround, ~new LayerMask(), QueryTriggerInteraction.Ignore);
 
         return hit.transform != null && !isAscending;
+    }
+
+    public void OnHit(bool onDeath)
+    {
+        if (onDeath)
+        {
+            Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnDeath);
+        }
+        else
+        {
+            Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnHit);
+        }
+
     }
 
 }
