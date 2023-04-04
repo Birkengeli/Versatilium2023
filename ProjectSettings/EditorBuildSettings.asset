@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Scene_Graybox_Level1.unity
+    guid: 77182ff2355e3764e90618c2afd82e2c
   m_configObjects: {}
