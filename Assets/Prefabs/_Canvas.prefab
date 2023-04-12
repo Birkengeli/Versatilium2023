@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 74939629}
   - component: {fileID: 74939628}
   - component: {fileID: 74939627}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
+using UnityEngine.XR;
 using static Controller_Character;
 
 public class Controller_Enemy : MonoBehaviour
@@ -27,7 +30,11 @@ public class Controller_Enemy : MonoBehaviour
         canAttack = 1 << 2,
         isInvincible = 1 << 3,
         hasAirControl = 1 << 1 | 1 << 4,
-        canNotBeKnockedBack = 1 << 5,
+        isStatic = 1 << 5,
+        staticAim = 1 << 6,
+        alwaysShooting = 1 << 7,
+        ignoresPlayer = 1 << 8,
+        startsPassive = 1 << 9,
     }
 
     [System.Flags]
@@ -38,6 +45,11 @@ public class Controller_Enemy : MonoBehaviour
         Walking_Combat = 1 << 2,
         Death = 1 << 3,
         Idle = 1 << 4,
+
+        Turning = 1 << 5,
+
+        WakingUp = 1 << 6,
+        GoingToSleep = 1 << 7,
     }
 
     public enum BehaviorState
@@ -80,14 +92,17 @@ public class Controller_Enemy : MonoBehaviour
 
     Vector3 StartPos;
     Vector3 currentTargetLocation;
+    Vector3 velocity_LastFrame;
     float timer;
+
+    Transform eye;
 
     Animator anim;
     Controller_Character.StatusEffect StatusEffects = Controller_Character.StatusEffect.None;
 
     public Tools_Sound.SoundClip[] soundClips;
 
-    // Start is called before the first frame update
+    #region Start
     void Start()
     {
         StartPos = transform.position;
@@ -97,23 +112,39 @@ public class Controller_Enemy : MonoBehaviour
 
         anim = GetComponentInChildren<Animator>();
 
-        Tools_Sound.Start(soundClips, transform);
-    }
+        foreach (Transform child in transform)
+        {
+            eye = child;
+            if (eye != anim.transform.parent)
+                break;
+        }
 
-    // Update is called once per frame
+        Tools_Sound.Start(soundClips, transform);
+
+        if (HasFlag((int)BehaviorTags, (int)BehaviorTag.startsPassive))
+            BehaviorTags = (BehaviorTag)ApplyFlag((int)BehaviorTags, (int)BehaviorTag.ignoresPlayer);
+
+    }
+    #endregion
+
+    #region Update
     void Update()
     {
         float timeStep = Time.deltaTime;
 
-        bool canSeePlayer = CanSeeTarget(player, false);
+        bool canSeePlayer = CanSeeTarget(player, false) && !HasFlag((int)BehaviorTags, (int)BehaviorTag.ignoresPlayer);
+        bool isStatic = HasFlag((int)BehaviorTags, (int)BehaviorTag.isStatic);
 
         if (BehaviorStates == BehaviorState.Idle)
         {
-            whileIdle(timeStep, canSeePlayer);
+            whileIdle(timeStep, false);
 
-            if (canSeePlayer) // On Idle
+            if (canSeePlayer) // On Reacting
             {
                 BehaviorStates = BehaviorState.Reacting;
+
+                if (HasFlag((int)AnimationFlags, (int)AnimationFlag.WakingUp))
+                    anim.Play("Armature|Turret_Errection_Up", 2);
             }
         }
 
@@ -125,6 +156,7 @@ public class Controller_Enemy : MonoBehaviour
             {
                 BehaviorStates = BehaviorState.InCombat;
                 timer = ReactionTime;
+
             }
         }
 
@@ -157,6 +189,14 @@ public class Controller_Enemy : MonoBehaviour
             {
                 BehaviorStates = BehaviorState.ReturningToIdle;
                 timer = ReactionTime;
+
+                if (HasFlag((int)AnimationFlags, (int)AnimationFlag.GoingToSleep))
+                    anim.Play("Armature|Turret_Errection_Down", 2);
+                if (HasFlag((int)AnimationFlags, (int)AnimationFlag.Turning))
+                {
+                    anim.Play("Armature|Turret_Pitch", 0, 0);
+                    anim.Play("Armature|Turret_Yaw", 1, 0);
+                }
             }
         }
 
@@ -168,14 +208,18 @@ public class Controller_Enemy : MonoBehaviour
             {
                 BehaviorStates = BehaviorState.Idle;
                 timer = 0;
+
+                whileIdle(timeStep, true);
             }
         }
 
 
-
-        Movement(timeStep, currentTargetLocation);
-        manualCollision(timeStep, velocity);
-
+        if (!isStatic)
+        {
+            ApplyNautralForces(timeStep, true); // Friction first.
+            Movement(timeStep, currentTargetLocation);
+            CollisionCheck(timeStep, velocity);
+        }
         Animation(timeStep);
 
         velocity_LastFrame = velocity;
@@ -184,16 +228,20 @@ public class Controller_Enemy : MonoBehaviour
         if (transform.position.y < -100)
         {
             Debug.LogError("An enemy fell out of the map and was automaticaly killed and disabled. ('" + transform.name + "' at position " + StartPos + ")");
-            onDeath();
+            OnHit(true);
             gameObject.SetActive(false);
         }
     }
 
-    Vector3 velocity_LastFrame;
+    #endregion
 
+    #region Behavior
     void whileIdle(float timeStep, bool onIdle)
     {
-        if (HasFlag((int)BehaviorTags, (int)BehaviorTag.canMove))
+
+        bool canMove = HasFlag((int)BehaviorTags, (int)BehaviorTag.canMove);
+
+        if (canMove)
         {
             bool onRandomMove = Random.Range(0f, 1f) < (timeStep / moveFrequency);
             if (onRandomMove)
@@ -203,13 +251,21 @@ public class Controller_Enemy : MonoBehaviour
 
             }
 
-            TurnTowards(timeStep, currentTargetLocation, TurnSpeed);
+            TurnTowards(timeStep, currentTargetLocation, false, TurnSpeed);
         }
     }
 
     void whileInCombat(float timeStep, bool onInCombat)
     {
-        #region Targeting
+        bool canAttack = HasFlag((int)BehaviorTags, (int)BehaviorTag.canAttack);
+        bool canMove = HasFlag((int)BehaviorTags, (int)BehaviorTag.canMove);
+        bool isStatic = HasFlag((int)BehaviorTags, (int)BehaviorTag.isStatic);
+        bool staticAim = HasFlag((int)BehaviorTags, (int)BehaviorTag.staticAim);
+        bool alwaysShooting = HasFlag((int)BehaviorTags, (int)BehaviorTag.alwaysShooting);
+
+        bool hasTurnAnimation = HasFlag((int)AnimationFlags, (int)AnimationFlag.Turning);
+
+        #region Aquire Target
 
         Vector3 targetPosition = player.position;
 
@@ -220,101 +276,90 @@ public class Controller_Enemy : MonoBehaviour
 
         #endregion
 
-        TurnTowards(timeStep, targetPosition, TurnSpeed);
+        #region Rotate Body & Eyes
 
+        if (!staticAim && !isStatic)
+        {
+            // First I turn the body thowards the Target
+            // While I do that, i turn the Eye back, so that it stands "still" relative to the world.
+            Vector3 eyeEuler = eye.eulerAngles; // Global Euler
+            TurnTowards(timeStep, targetPosition, false, TurnSpeed, true); // Make this return the difference?
+            eye.eulerAngles = eyeEuler; // This ensures the eye is still relative to the world.
+        }
+        if (!staticAim)
+            // Then I turn the actual Eye thowards the target
+            TurnTowards(timeStep, targetPosition, true, TurnSpeed * 2, false);
+        #endregion
 
-        #region Aiming
+        #region Assign Respective Animation
         Vector3 directionToTarget = targetPosition - transform.position;
         Vector3 directionToTarget_Horizontal = directionToTarget - Vector3.Project(directionToTarget, transform.up);
 
         float yaw = Vector3.Angle(-transform.forward, directionToTarget_Horizontal);
         bool isToTheRight = Vector3.Dot(directionToTarget, transform.right) > 0;
-        float angleToTarget = (180f + (isToTheRight ? -yaw : yaw)) / 360f;
+        float angleToTarget = 180f + (isToTheRight ? -yaw : yaw);
+
+        float eye_X = eye.localEulerAngles.x;
+        float alt_Pitch = Mathf.Clamp(360f - eye_X, 0, 45); // Using the eye transform. Much smoother but not as cool.
+
+        float eye_Y = eye.localEulerAngles.y;
+        float alt_Yaw = eye_Y >= 0 ? eye_Y : 360f + eye_Y; // Using the eye transform. Much smoother but not as cool.
+
+        if (hasTurnAnimation)
+        {
+           anim.Play("Armature|Turret_Pitch", 0, alt_Pitch / 45f);
+           anim.Play("Armature|Turret_Yaw", 1, alt_Yaw / 360f);
+        }
 
         #endregion
 
         #region Fire
-        bool targetInView = angleToTarget < ConeOfFire;
+        bool targetInView = (1f - Vector3.Dot(eye.forward, directionToTarget)) * 180 < ConeOfFire;
 
-        if(targetInView)
+        if(targetInView || alwaysShooting)
         {
 
-            transform.LookAt(targetPosition); // Back to the player.
-
-            TurnTowards(timeStep, targetPosition, TurnSpeed);
-
-            // I need to fire the Versatilium not using look, but look + angle offset
-
-            Weapon.OnFire(Weapon_Versatilium.TriggerFlags.SemiAutomatic);
+            if(canAttack)
+                Weapon.OnFire(Weapon_Versatilium.TriggerFlags.SemiAutomatic);
 
         }
 
         #endregion
 
         #region Combat Walking
-        // Where can I go?
-        float distanceToWall_Right = 0;
-        float distanceToWall_Left = 0;
-
-        for (int i = 0; i < 2; i++)
+        if(canMove)
         {
-            RaycastHit hit;
-            Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
+            // Where can I go?
+            float distanceToWall_Right = 0;
+            float distanceToWall_Left = 0;
 
-            if (hit.transform != null)
+            for (int i = 0; i < 2; i++)
             {
-                if (i == 0)
-                    distanceToWall_Right = hit.distance;
-                else
-                    distanceToWall_Left = hit.distance;
+                RaycastHit hit;
+                Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
+
+                if (hit.transform != null)
+                {
+                    if (i == 0)
+                        distanceToWall_Right = hit.distance;
+                    else
+                        distanceToWall_Left = hit.distance;
+                }
+
             }
 
+            currentTargetLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
+            currentTargetLocation = targetPosition;
         }
-
-
-        currentTargetLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
-        currentTargetLocation = targetPosition;
-
-
         #endregion
-
-
     }
 
     void whileSearching(float timeStep)
     {
-        Vector3 targetPosition = player.position; // Probably should be last Seen position
 
-        TurnTowards(timeStep, targetPosition, TurnSpeed);
-        currentTargetLocation = targetPosition;
     }
 
-    void Animation(float timeStep)
-    {
-        #region Animation
-
-        float currentSpeed = velocity.magnitude;
-        float previousSpeed = velocity_LastFrame.magnitude;
-
-
-        bool isIdle = currentSpeed <= 0.1f;
-        bool onIdle = isIdle && previousSpeed > 0.1f;
-
-        bool isWalking = currentSpeed > 0.1f;
-        bool onWalking = isWalking && previousSpeed <= 0.1f;
-
-        bool canWalk = HasFlag((int)AnimationFlags, (int)AnimationFlag.Walking);
-        bool hasIdle = HasFlag((int)AnimationFlags, (int)AnimationFlag.Idle);
-
-
-        if (canWalk && onWalking)
-            anim.Play("Walking", 0);
-
-        if (hasIdle && onIdle)
-            anim.Play("Idle", 0);
-        #endregion
-    }
-
+    #endregion
 
 	#region Lead Shots
     Vector3 targetPosition_Previous;
@@ -351,32 +396,40 @@ public class Controller_Enemy : MonoBehaviour
     #endregion
 
     #region Movement
-    void TurnTowards(float timeStep, Vector3 targetPosition, float turnSpeed)
+    void TurnTowards(float timeStep, Vector3 targetPosition, bool turnEye, float turnSpeed, bool yawOnly = false)
     {
-        targetPosition.y = transform.position.y; // Make it only rotate on Z plane
+        Transform currentTransform = turnEye ? eye : transform;
 
-        Vector3 directionToTarget = targetPosition - transform.position;
+        if(yawOnly)
+            targetPosition.y = currentTransform.position.y; // Make it only rotate on Z plane
 
-        transform.forward = Vector3.Slerp(transform.forward, directionToTarget.normalized, turnSpeed * timeStep);
+        Vector3 directionToTarget = targetPosition - currentTransform.position;
+
+        currentTransform.forward = Vector3.Slerp(currentTransform.forward, directionToTarget.normalized, turnSpeed * timeStep);
     }
 
     void Movement(float timeStep, Vector3 targetLocation)
     {
+        bool canMove = HasFlag((int)BehaviorTags, (int)BehaviorTag.canMove) && !HasFlag((int)BehaviorTags, (int)BehaviorTag.isStatic);
         bool freezeMovement = HasStatusEffect(Controller_Character.StatusEffect.FreezeMovement);
-        float characterHeight = 2;
-
         bool noInput = targetLocation == Vector3.zero || Vector3.Distance(transform.position, targetLocation) < 0.25f;
+        bool isGrounded = IsGrounded();
 
-        RaycastHit hit;
-        Physics.Raycast(transform.position, -Vector3.up, out hit, characterHeight / 2);
-        bool isGrounded = hit.transform != null;
-    
         Vector3 locationToDirection = (targetLocation - transform.position).normalized;
 
-        Vector3 verticalVelocity = Vector3.Project(velocity, Vector3.down);
+        if (isGrounded && canMove && !freezeMovement && !noInput)
+            velocity += locationToDirection * moveSpeed * friction * timeStep;
+    }
+
+    void ApplyNautralForces(float timeStep, bool andFriction)
+    {
+        bool isGrounded = IsGrounded();
+
+
+        Vector3 verticalVelocity = Vector3.Project(velocity, transform.up);
         Vector3 horizontalVelocity = velocity - verticalVelocity;
 
-        bool isAscending = Vector3.Dot(Vector3.up, verticalVelocity) > 0;
+        bool isAscending = Vector3.Dot(transform.up, verticalVelocity) > 0;
 
         if (!isGrounded)
             velocity += Physics.gravity * timeStep;
@@ -385,19 +438,18 @@ public class Controller_Enemy : MonoBehaviour
         {
             velocity -= horizontalVelocity * friction * timeStep;
 
-            if(isGrounded && !isAscending)
+            if (isGrounded && !isAscending)
                 velocity -= verticalVelocity; // If grounded, stop falling
-
-            if (!freezeMovement && !noInput)
-                velocity += locationToDirection * moveSpeed * friction * timeStep;
         }
     }
 
-    void manualCollision(float timeStep, Vector3 currentVelocity)
+
+
+    void CollisionCheck(float timeStep, Vector3 currentVelocity)
     {
         CapsuleCollider capsule = GetComponent<CapsuleCollider>();
 
-        bool isGrounded = true;
+        bool isGrounded = IsGrounded();
 
         float DistanceTimesSize = (currentVelocity.magnitude * timeStep) / (capsule.radius / 2); // The radius is divided by two to make it more accurate
 
@@ -498,32 +550,46 @@ public class Controller_Enemy : MonoBehaviour
 
     #endregion
 
-    public void onDeath()
+    #region Health
+
+    public void OnHit(bool onDeath)
     {
+        bool startsPassive = HasFlag((int)BehaviorTags, (int)BehaviorTag.startsPassive);
 
-        bool hasDeathAnimation = HasFlag((int)AnimationFlags, (int)AnimationFlag.Death);
+        if (startsPassive)
+           BehaviorTags = (BehaviorTag)ApplyFlag((int)BehaviorTags, (int)BehaviorTag.ignoresPlayer, true);
 
-        if (hasDeathAnimation)
-            anim.Play("Death", 0);
-        else
-            transform.GetChild(0).position += Vector3.down * 100;
+        Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnHit);
 
-        Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnDeath);
 
-        foreach (Drop drop in drops)
+        if (onDeath)
         {
-            float randomNumber = Random.Range(0f, 1f);
+            bool hasDeathAnimation = HasFlag((int)AnimationFlags, (int)AnimationFlag.Death);
 
-            if (randomNumber <= drop.dropRate)
+            if (hasDeathAnimation)
+                anim.Play("Death", 0);
+            else
+                transform.GetChild(0).position += Vector3.down * 100;
+
+            Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnDeath);
+
+            foreach (Drop drop in drops)
             {
-                GameObject dropObject = Instantiate(drop.prefab);
-                dropObject.transform.position = transform.position + Vector3.up * 0.1f;
-                
+                float randomNumber = Random.Range(0f, 1f);
+
+                if (randomNumber <= drop.dropRate)
+                {
+                    GameObject dropObject = Instantiate(drop.prefab);
+                    dropObject.transform.position = transform.position + Vector3.up * 0.1f;
+
+                }
             }
         }
 
     }
+    #endregion
 
+    #region Misc.
     bool CanSeeTarget(Transform target, bool mustBeUnobstructed)
     {
         Vector3 targetPosition = target.position;
@@ -552,6 +618,44 @@ public class Controller_Enemy : MonoBehaviour
 
         return true;
     }
+
+    void Animation(float timeStep)
+    {
+        #region Animation
+
+        float currentSpeed = velocity.magnitude;
+        float previousSpeed = velocity_LastFrame.magnitude;
+
+
+        bool isIdle = currentSpeed <= 0.1f;
+        bool onIdle = isIdle && previousSpeed > 0.1f;
+
+        bool isWalking = currentSpeed > 0.1f;
+        bool onWalking = isWalking && previousSpeed <= 0.1f;
+
+        bool canWalk = HasFlag((int)AnimationFlags, (int)AnimationFlag.Walking);
+        bool hasIdle = HasFlag((int)AnimationFlags, (int)AnimationFlag.Idle);
+
+
+        if (canWalk && onWalking)
+            anim.Play("Walking", 0);
+
+        if (hasIdle && onIdle)
+            anim.Play("Idle", 0);
+        #endregion
+    }
+
+    bool IsGrounded()
+    {
+        float characterHeight = GetComponent<CapsuleCollider>().height;
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2);
+
+        return hit.transform != null;
+    }
+
+    #endregion
 
     #region Tools
 
@@ -591,6 +695,20 @@ public class Controller_Enemy : MonoBehaviour
     public bool HasFlag(int mask, int effect)
     {
         return (mask & effect) != 0;
+    }
+
+    public int ApplyFlag(int mask, int effect, bool removeFlag = false)
+    {
+        if (!removeFlag)
+        {
+            mask |= effect;
+        }
+        else
+        {
+            mask &= ~effect;
+        }
+
+        return mask;
     }
 
     #endregion

@@ -18,15 +18,17 @@ public class Trigger_Event : MonoBehaviour
         HurtBox,
         ToggleObjectExistence,
         DisplayText,
-        ReturnToMainMenu,
+        ReturnToMainMenu, 
+        Cutscene,
     }
 
     [System.Serializable]
     public class Event
     {
-        [Header("Settings")]
+        [Header("Settings. (Leave duration at 0 for automatic duration)")]
         public TriggerTypes triggerType;
         public GameObject[] gameObjects;
+        public float duration = 0;
 
         [Header("Options")]
         public float delayInSeconds = 0;
@@ -40,13 +42,15 @@ public class Trigger_Event : MonoBehaviour
         [Header("Options for Sound")]
         public AudioSource audioSource;
         public AudioClip audioClip;
+        [Range(0.1f, 1.0f)]             
         public float volumeScale = 1;
         public bool enableLoop = false;
 
         [Header("Options for Text (Leave duration at 0 for automatic duration)")]
         public string text;
         public Color color = Color.red;
-        public float duration = 0;
+
+   
     }
 
     public Event[] Events;
@@ -117,6 +121,32 @@ public class Trigger_Event : MonoBehaviour
                     float readingDuration = (float)currentEvent.text.Length / 25f;
                     currentEvent.duration = readingDuration + 3f; // The 3 seconds is the buffer for comfort.
                 }
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.Cutscene)
+            {
+
+                foreach (GameObject child in currentEvent.gameObjects)
+                {
+                    child.SetActive(false);
+                }
+
+                if (currentEvent.duration == 0)
+                {
+                    currentEvent.duration = 2f;
+                }
+
+                if (currentEvent.gameObjects.Length == 0)
+                {
+                    string warningMessage = "There is no Camera attched to the Cutscene.";
+
+                   
+
+                    Debug.LogWarning(warningMessage);
+                    currentEvent.triggerType = TriggerTypes.Disabled;
+                }
+
+               
             }
         }
 
@@ -277,6 +307,30 @@ public class Trigger_Event : MonoBehaviour
             if (currentEvent.triggerType == TriggerTypes.ReturnToMainMenu)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.Cutscene)
+            {
+
+
+                bool enable = false;
+
+                if (currentEvent.duration != -1)
+                {
+                    currentEvent.delayInSeconds = currentEvent.duration;
+                    enable = true;
+                    timerIsActivated = true;
+
+                    currentEvent.duration = -1;
+                }
+
+               
+       
+
+                foreach (GameObject child in currentEvent.gameObjects)
+                {
+                    child.SetActive(enable);
+                }
             }
         }
 

@@ -275,11 +275,11 @@ public class Controller_Character : MonoBehaviour
     }
 
 
-    float footstepCooldown = 1; // If I keep it at 1, I won't make a step instantly after spawning
+    float footstepCooldown = 0.1f; // If I keep it at non-zero, I won't make a step instantly after spawning
     void Footsteps()
     {
         float currentSpeed = velocity.magnitude;
-        bool isGrounded = Mathf.Round(velocity.y) == 0;
+        bool isGrounded = IsGrounded();
 
         if (footstepCooldown > 0)
             footstepCooldown -= Time.deltaTime * currentSpeed / speed;
@@ -315,6 +315,16 @@ public class Controller_Character : MonoBehaviour
             Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnHit);
         }
 
+    }
+
+    bool IsGrounded()
+    {
+        float characterHeight = GetComponent<CapsuleCollider>().height;
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2 + 0.01f);
+
+        return hit.transform != null;
     }
 
 }

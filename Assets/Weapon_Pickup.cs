@@ -104,8 +104,6 @@ public class Weapon_Pickup : MonoBehaviour
 
         for (int i = 0; i < swapScript.Modules.Length; i++)
         {
-            print(swapScript.Modules[i].name.ToLower());
-
             if (swapScript.Modules[i].name.ToLower() == name)
                return swapScript.Modules[i];
         }

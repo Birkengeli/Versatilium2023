@@ -178,10 +178,6 @@ public class Weapon_Switching : MonoBehaviour
 
                 if (isMainCore && WeaponBuildingMode == WeaponBuildingModes.CoreBased)
                     StoreIndexes(nextModule, true);
-
-                
-
-                Debug.Log("Swapped module to " + nextModule.name + " at position '" + newIndex + "'.");
             }
         }
 

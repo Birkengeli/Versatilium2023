@@ -635,6 +635,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hitTrigger = hitSomething && hit.collider.isTrigger == true;
                 bool hitTheWorld = hitSomething && !hitTrigger;
                 bool hitMyself = hit.transform == currentProjectile.userTransform;
+                bool hitCharacter = hitSomething && (hit.transform.tag == "Player" || hit.transform.tag == "Enemy");
                 bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
 
                 bool unBounceableSurface = hitSomething && hit.transform.tag == "No Bouncing Projectile";
@@ -661,6 +662,20 @@ public class Weapon_Versatilium : MonoBehaviour
                         unBounceableSurface = true;
                     }
 
+                    if (true && !hitActivator && !hitCharacter) // Decals
+                    {
+                        Transform decal = Instantiate(currentProjectile.visualTransform.gameObject).transform;
+
+                        decal.forward = hit.normal;
+                        decal.position = hit.point + hit.normal * ProjectileScale / 2 + currentProjectile.velocity.normalized * ProjectileScale / 2;
+                        //decal.parent = hit.transform;
+
+                        Tools_Animator spriteAnim = decal.GetComponent<Tools_Animator>();
+                        spriteAnim.Play("Impact");
+
+                        decal.GetComponent<Tools_Sprite>().enabled = false;
+                    }
+
                     if (currentProjectile.remainingBounces > 0 && !unBounceableSurface || bounceableSurface)
                     {
                         if(!bounceableSurface)
@@ -675,6 +690,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
                     }
+
+                 
 
                 }
             }

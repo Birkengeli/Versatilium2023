@@ -142,8 +142,14 @@ public class Component_Health : MonoBehaviour
         if (onDeath)
             WhileDead(true); // On Death
 
-        if(!isDead || onDeath)
-            playerScript.OnHit(onDeath);
+        if (!isDead || onDeath)
+        {
+            if(isPlayer)
+                playerScript.OnHit(onDeath);
+            if(!isPlayer)
+                enemyScript.OnHit(onDeath);
+        }
+      
     }
 
     public static Component_Health Get(Transform target)
@@ -251,7 +257,7 @@ public class Component_Health : MonoBehaviour
                 enemyScript.enabled = false;
                 GetComponent<Collider>().enabled = false;
 
-                enemyScript.onDeath();
+
             }
         }
     }

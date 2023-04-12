@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tools_Animator : MonoBehaviour
 {
@@ -10,16 +11,17 @@ public class Tools_Animator : MonoBehaviour
         public string name;
         public Sprite[] sprites;
         public bool DoLoop;
+        public bool deleteAtEnd;
         public bool startRandom;
     }
 
     public CustomAnimation[] Animations;
-    private CustomAnimation CurrentAnimation;
+    [HideInInspector] public CustomAnimation CurrentAnimation;
 
     [Header("Settings")]
     public int FrameRate = 10;
     private float frameTimer;
-    private int frameIndex;
+    [HideInInspector] public int frameIndex;
     public bool playOnAwake = true;
 
     [Header("Assign Variables")]
@@ -55,6 +57,8 @@ public class Tools_Animator : MonoBehaviour
             frameIndex++;
         else if (CurrentAnimation.DoLoop)
             frameIndex = 0;
+        else if (CurrentAnimation.deleteAtEnd)
+            Destroy(gameObject);
     }
 
     public void Play(string name, bool forceReplay = false)

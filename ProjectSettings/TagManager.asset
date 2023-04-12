@@ -11,6 +11,7 @@ TagManager:
   - One Way Shield
   - Activator
   - AntiProjectile
+  - Event_Trigger
   layers:
   - Default
   - TransparentFX
