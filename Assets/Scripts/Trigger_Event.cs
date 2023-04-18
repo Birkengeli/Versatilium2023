@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Trigger_Event : MonoBehaviour
@@ -20,6 +21,8 @@ public class Trigger_Event : MonoBehaviour
         DisplayText,
         ReturnToMainMenu, 
         Cutscene,
+        FadeToColor,
+        TeleportToGameObject,
     }
 
     [System.Serializable]
@@ -332,6 +335,53 @@ public class Trigger_Event : MonoBehaviour
                     child.SetActive(enable);
                 }
             }
+
+            if (currentEvent.triggerType == TriggerTypes.FadeToColor)
+            {
+                Color targetColor = currentEvent.color;
+                float alpha = targetColor.a;
+                targetColor.a = 1f - alpha; // Reverse alpha;
+                Transform canvas = GameObject.Find("_Canvas").transform;
+                Image fade = null;
+                foreach (Transform child in canvas)
+                    if (child.name.ToLower() == "fade")
+                    {
+                        child.gameObject.SetActive(true);
+                        fade = child.GetComponent<Image>();
+                        fade.color = targetColor;
+                        fade.CrossFadeColor(targetColor, 0, true, true);
+                        break;
+                    }
+
+                targetColor.a = alpha;
+                fade.color = targetColor;
+                //fade.CrossFadeColor(targetColor, 0, true, true);
+                print(targetColor);
+                fade.CrossFadeColor(targetColor, currentEvent.duration, false, true, true);
+
+
+
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.TeleportToGameObject)
+            {
+                Controller_Character controller = player.GetComponent<Controller_Character>();
+                Transform exitTransform = currentEvent.gameObjects[0].transform;
+
+
+                Vector3 relativEuler = player.eulerAngles - transform.eulerAngles;
+                Vector3 localPosition = transform.InverseTransformPoint(player.position);
+                Vector3 localVelocity = transform.InverseTransformDirection(controller.velocity);
+
+                Vector3 newWorldEuler = relativEuler + exitTransform.eulerAngles;
+                Vector3 newWorldPos = exitTransform.TransformPoint(localPosition);
+                Vector3 newWorldVel = exitTransform.TransformDirection(localVelocity);
+
+                player.eulerAngles = newWorldEuler;
+                player.position = newWorldPos;
+                controller.velocity = newWorldVel;
+            }
+
         }
 
         if (!timerIsActivated) // If there is no timer, or the timer is up, disable the whole thing.
