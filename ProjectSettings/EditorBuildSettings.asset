@@ -4,13 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-<<<<<<< HEAD
-    path: Assets/Scenes/Enviorment_Prototyping.unity
-    guid: e64be3c84bd60304fb47c4594afa3ba2
-=======
-    path: Assets/Scenes/Scene_Graybox_Level1.unity
-    guid: 77182ff2355e3764e90618c2afd82e2c
->>>>>>> main
+  m_Scenes: []
   m_configObjects: {}
