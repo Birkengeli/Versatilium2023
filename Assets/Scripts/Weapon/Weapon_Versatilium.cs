@@ -642,7 +642,8 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
                 bool hitThroughOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
                 bool hitActivator = hitSomething && hit.transform.tag == "Activator";
-                bool hitAntiProjectile = hitTrigger && hit.transform.tag == "AntiProjectile";
+                bool hitAntiProjectile = DidCollideWithPlayerProjectile(currentProjectile.position, ProjectileScale * distanceScale);
+
 
                 if (hitAntiProjectile)
                     bounceableSurface = true;
@@ -776,5 +777,30 @@ public class Weapon_Versatilium : MonoBehaviour
     static bool HasFlag(int mask, int effect)
     {
         return (mask & effect) != 0;
+    }
+
+    bool DidCollideWithPlayerProjectile(Vector3 myProjectilePos, float myProjectileScale) // I hate this function. Shouldn't exist.
+    {
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        Weapon_Versatilium playerWeapon = Player.GetComponent<Weapon_Versatilium>();
+
+        bool isThePlayer = Player == gameObject;
+
+        if (isThePlayer)
+            return false;
+
+        foreach (Projectile currentProjectile in playerWeapon.Projectiles)
+        {
+            float coreDistance = Vector3.Distance(currentProjectile.position, myProjectilePos);
+            float projectileRadiuses = myProjectileScale / 2 + playerWeapon.ProjectileScale / 2;
+
+            if (coreDistance <= projectileRadiuses) // Radius
+            {
+                // code to destroy the counter projectile.
+                return true;
+            }
+        }
+
+        return false;
     }
 }
