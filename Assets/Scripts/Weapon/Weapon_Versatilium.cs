@@ -94,6 +94,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public bool canTeleportUser;
         public bool counterProjectile;
         public bool isExplosive;
+        public float homingGravity = 0;
 
         // public bool deleteProjectileOnImpact = true;
         public int bounceCount = 0;
@@ -589,7 +590,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
             bool isForwardEnough = Vector3.Dot(forward, directionToTarget) > degreesToRange;
-            bool isTaggedCorrectly = currentTarget.tag == "Target";
+            bool isTaggedCorrectly = currentTarget.tag == "Target" || currentTarget.tag == "Player" || currentTarget.tag == "Enemy";
             float distance = Vector3.Distance(position, currentTarget.position);
 
             if (isForwardEnough && distance < closestDistance && isTaggedCorrectly)
@@ -647,15 +648,18 @@ public class Weapon_Versatilium : MonoBehaviour
             if (hasVisuals)
                 currentProjectile.visualTransform.localScale = Vector3.one * currentScale;
 
-            if(false)
-            { // Adjust the velocity for homing.
-                Transform target = FindClosestTarget(currentProjectile.position, currentProjectile.velocity.normalized, 1000, 360);
+            #region Homing
+            if (currentProjectile.projectileStats.homingGravity != 0)
+            {
+                Transform target = FindClosestTarget(currentProjectile.position, currentProjectile.velocity.normalized, 5, 300);
                 if (target != null)
                 {
+                 
                     Vector3 directionToTarget = (target.position - currentProjectile.position);
-                    currentProjectile.velocity += directionToTarget * 10 * timeStep;
+                    currentProjectile.velocity += directionToTarget.normalized * currentProjectile.projectileStats.homingGravity * timeStep;
                 }
             }
+            #endregion
 
             {
                 RaycastHit hit;
