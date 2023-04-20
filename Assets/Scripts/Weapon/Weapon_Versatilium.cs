@@ -83,7 +83,6 @@ public class Weapon_Versatilium : MonoBehaviour
         public float knockback_self = 0;
 
         public bool inheritUserVelocity = true;
-        public float targetSeekingStrength = 0;
 
         [Header("Range")]
         public float distanceBeforeDamageDrop = 20;

@@ -113,6 +113,12 @@ public class Component_Health : MonoBehaviour
                 if (enemyScript.HasFlag((int)enemyScript.BehaviorTags, (int)Controller_Enemy.BehaviorTag.isInvincible))
                     return;
 
+                bool isTurret = enemyScript.HasFlag((int)enemyScript.BehaviorTags, (int)Controller_Enemy.BehaviorTag.CUSTOM_AdditionalTurretBehaviors);
+                Controller_Enemy.BehaviorState enemyState = enemyScript.BehaviorStates;
+
+                if (enemyState != Controller_Enemy.BehaviorState.InCombat)
+                    return;
+
 
 
                 enemyScript.velocity += (knockBack + Vector3.up * 1f) * knockback_Multiplier;

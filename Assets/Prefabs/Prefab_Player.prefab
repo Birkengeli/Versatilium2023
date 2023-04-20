@@ -258,7 +258,7 @@ MonoBehaviour:
   friction: 10
   sprintSpeedModifier: 1.7
   jumpHeight: 2
-  hasAirControl: 1
+  airControl: 1
   velocity: {x: 0, y: 0, z: 0}
   gravity: 9.81
   terminalVelocity: 80.55
@@ -322,11 +322,12 @@ MonoBehaviour:
     inheritUserVelocity: 0
     targetSeekingStrength: 0
     distanceBeforeDamageDrop: 20
-    Projectile_Speed: 25
+    Projectile_Speed: 10
     Projectile_Gravity: 0
     canTeleportUser: 0
     counterProjectile: 0
     isExplosive: 0
+    homingGravity: 0
     bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323

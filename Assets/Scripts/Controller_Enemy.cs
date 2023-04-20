@@ -36,6 +36,7 @@ public class Controller_Enemy : MonoBehaviour
         ignoresPlayer = 1 << 8,
         startsPassive = 1 << 9,
         doesNotChasePlayer = 1 << 10,
+        CUSTOM_AdditionalTurretBehaviors = 1 << 11,
     }
 
     [System.Flags]
@@ -135,6 +136,7 @@ public class Controller_Enemy : MonoBehaviour
 
         bool canSeePlayer = CanSeeTarget(player, false) && !HasFlag((int)BehaviorTags, (int)BehaviorTag.ignoresPlayer);
         bool isStatic = HasFlag((int)BehaviorTags, (int)BehaviorTag.isStatic);
+        bool custom_isTurret = HasFlag((int)BehaviorTags, (int)BehaviorTag.CUSTOM_AdditionalTurretBehaviors);
 
         if (BehaviorStates == BehaviorState.Idle)
         {
@@ -268,10 +270,10 @@ public class Controller_Enemy : MonoBehaviour
 
         #region Aquire Target
 
-        Vector3 targetPosition = player.position;
+        Vector3 targetPosition = player.position + player.up * 0.75f;
 
         if (isLeadingTarget)
-            targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+            targetPosition = Target_LeadShot(targetPosition, Weapon.WeaponStats.Projectile_Speed);
 
 
 

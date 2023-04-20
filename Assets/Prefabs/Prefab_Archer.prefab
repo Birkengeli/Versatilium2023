@@ -114,19 +114,19 @@ MonoBehaviour:
     ProjectileType: 1
     damage: 34
     knockback: 10
-    fireRate: 2
+    fireRate: 0.5
     PelletCount: 1
-    Deviation: 0.01
+    Deviation: 0
     knockback_self: 0
     inheritUserVelocity: 0
-    targetSeekingStrength: 0
-    distanceBeforeDamageDrop: 20
-    Projectile_Speed: 25
-    Projectile_Gravity: 9.807
+    distanceBeforeDamageDrop: 100
+    Projectile_Speed: 10
+    Projectile_Gravity: 0
     canTeleportUser: 0
     counterProjectile: 0
     isExplosive: 0
-    bounceCount: 0
+    homingGravity: 25
+    bounceCount: 2
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -140,8 +140,8 @@ MonoBehaviour:
   fireRate_GlobalCD: 0
   frameCounter: 0
   useVisuals: 1
-  projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
-  ProjectileScale: 0.1
+  projectilePrefab: {fileID: 1009257707128953476, guid: 6b6e6d1070ed370468c127b618eb1d22, type: 3}
+  ProjectileScale: 0.25
   soundClips: []
 --- !u!114 &3133308676121516224
 MonoBehaviour:
@@ -162,14 +162,14 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   moveFrequency: 5
   wanderDistanceMax: 50
-  ReactionTime: 1
+  ReactionTime: 0
   rememberPlayerFor: 3
-  DetectionRange: 10
+  DetectionRange: 50
   isLeadingTarget: 1
   ConeOfFire: 45
   isInCombat: 0
   Weapon: {fileID: 546635621893092960}
-  BehaviorTags: 7
+  BehaviorTags: 1031
   AnimationFlags: 0
   drops: []
   player: {fileID: 0}
