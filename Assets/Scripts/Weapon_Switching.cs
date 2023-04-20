@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
+using static Controller_Enemy;
 
 public class Weapon_Switching : MonoBehaviour
 {
@@ -307,11 +308,25 @@ public class Weapon_Switching : MonoBehaviour
 
         if (name == "Recoil+")
         {
-            float recoilBoost = -(5f / 3);
-            float knockbackBoost = -(15f / 3);
+            // Settings
+            float recoilBoost = -3f;
+            float knockbackBoost = -10f;
+            float damageMultiplierBoost = 2;
+            // Settings End
+
+            bool isInBurst = Weapon_Versatilium.HasFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge);
+
+
+            weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
+            weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
 
             weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
             weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
+
+            if (!unEquip)
+                weaponScript.WeaponStats.damage *= damageMultiplierBoost;
+            else
+                weaponScript.WeaponStats.damage /= damageMultiplierBoost;
 
             return;
         }
@@ -333,7 +348,7 @@ public class Weapon_Switching : MonoBehaviour
         }
 
 
-        Debug.Log("Could not find '" + name + "'.");
+        //Debug.Log("Could not find '" + name + "'.");
     }
 
     #region Tools
@@ -443,6 +458,20 @@ public class Weapon_Switching : MonoBehaviour
         Debug.LogWarning("Error, could not find '" + name + "'.");
 
         return null;
+    }
+
+    public int ApplyFlag(int mask, int effect, bool removeFlag = false)
+    {
+        if (!removeFlag)
+        {
+            mask |= effect;
+        }
+        else
+        {
+            mask &= ~effect;
+        }
+
+        return mask;
     }
 
     #endregion

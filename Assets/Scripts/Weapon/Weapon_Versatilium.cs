@@ -45,6 +45,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public Vector3 position;
         public float gravity;
         public float lifeTime;
+        public float chargePercentage;
         public int remainingBounces;
 
         [HideInInspector]
@@ -253,6 +254,27 @@ public class Weapon_Versatilium : MonoBehaviour
 
         if (HasFlag((int)triggerTypes, (int)TriggerFlags.Charge))
         {
+            float chargePerentage_Clamped = Mathf.Clamp(Charge_current / Charge_maximumTime, 0, 1);
+
+            if (onKeyDown && chargeUpVisual == null && Charge_current < Charge_minimumTime)
+            {
+                chargeUpVisual = Instantiate(projectilePrefab);
+
+
+                chargeUpVisual.transform.localScale = Vector3.one * ProjectileScale;
+                chargeUpVisual.transform.parent = Origin_Barrel;
+                chargeUpVisual.transform.localPosition = Vector3.zero;
+
+                chargeUpVisual.GetComponent<SpriteRenderer>().color *= new Color(1, 1, 1, 0.5f);
+                chargeUpVisual.layer = LayerMask.NameToLayer("VisibleOnlyInFirstPerson");
+            }
+
+            if (onKeyTrue && chargeUpVisual != null)
+            {
+                chargeUpVisual.transform.parent = null;
+                chargeUpVisual.transform.localScale = Vector3.one * ProjectileScale * chargePerentage_Clamped;
+                chargeUpVisual.transform.parent = Origin_Barrel;
+            }
 
             if (onKeyDown && fireRate_GlobalCD < 0) // Start Charge
                 Charge_current = 0;
@@ -262,6 +284,9 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (onKeyRelease && fireRate_GlobalCD < 0) // Release Charge
             {
+                Destroy(chargeUpVisual);
+                chargeUpVisual = null;
+
                 if (Charge_current < Charge_minimumTime)
                 {
                     // On Tap fire
@@ -284,6 +309,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
     }
 
+    GameObject chargeUpVisual;
+
 	#endregion
 
 	#region Projectile
@@ -296,9 +323,16 @@ public class Weapon_Versatilium : MonoBehaviour
         Tools_Sound.Play(soundClips, Tools_Sound.SoundFlags.OnUse);
 
 
+     
+        #region Charge Options
+        float minChargePercentage = Charge_minimumTime/Charge_maximumTime;
+        float chargePercentage = Mathf.Clamp(HasFlag((int)currentStats.triggerTypes, (int)TriggerFlags.Charge) ? Charge_current / Charge_maximumTime : 1, minChargePercentage, 1);
+
+        #endregion
+
         if (isWieldedByPlayer)
         {
-            playerScript.velocity += User_POV.forward * currentStats.knockback_self;
+            playerScript.velocity += User_POV.forward * currentStats.knockback_self * chargePercentage;
         }
 
         if (!isWieldedByPlayer)
@@ -306,14 +340,9 @@ public class Weapon_Versatilium : MonoBehaviour
 
         }
 
-        #region Charge Options
-        float chargePercentage = HasFlag((int)currentStats.triggerTypes, (int)TriggerFlags.Charge) ? Charge_current / Charge_maximumTime : 1;
-        
 
-		#endregion
-
-		#region Hitscan
-		if (currentStats.ProjectileType == ProjectileTypes.Hitscan)
+        #region Hitscan
+        if (currentStats.ProjectileType == ProjectileTypes.Hitscan)
         {
 
             for (int i = 0; i < currentStats.PelletCount; i++)
@@ -456,6 +485,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.projectileStats = currentStats;
                 currentProjectile.remainingBounces = currentStats.bounceCount;
                 currentProjectile.isExplosive = currentStats.isExplosive;
+                currentProjectile.chargePercentage = chargePercentage;
 
                 if((!isMultiPellet && !isBurstFire) || (isMultiPellet && i == 0) || (isBurstFire && currentStats.burstCounter == 0)) // Applies on-hit
                 {
@@ -518,8 +548,6 @@ public class Weapon_Versatilium : MonoBehaviour
         for (int i = 0; i < hits.Length; i++)
         {
             Transform currentHit = hits[i].transform;
-
-            Debug.Log(currentHit.name);
 
             bool hitPlayer = currentHit.CompareTag("Player");
             bool hitEnemy = currentHit.CompareTag("Enemy");
@@ -613,9 +641,10 @@ public class Weapon_Versatilium : MonoBehaviour
 
             float distanceModifier = (currentProjectile.velocity.magnitude * currentProjectile.lifeTime) / currentProjectile.projectileStats.distanceBeforeDamageDrop;
             float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
+            float currentScale = ProjectileScale * distanceScale * currentProjectile.chargePercentage;
 
             if (hasVisuals)
-                currentProjectile.visualTransform.localScale = Vector3.one * ProjectileScale * distanceScale;
+                currentProjectile.visualTransform.localScale = Vector3.one * currentScale;
 
             if(false)
             { // Adjust the velocity for homing.
@@ -629,7 +658,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
             {
                 RaycastHit hit;
-                Physics.SphereCast(currentProjectile.position, ProjectileScale / 2, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
+                Physics.SphereCast(currentProjectile.position, currentScale / 2, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep, ~new LayerMask(), QueryTriggerInteraction.Collide);
 
                 bool hitSomething = hit.transform != null;
                 bool hitTrigger = hitSomething && hit.collider.isTrigger == true;
@@ -642,7 +671,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool bounceableSurface = hitSomething && hit.transform.tag == "Always Bounces Projectile";
                 bool hitThroughOneWayShield = hitSomething && hit.collider.transform.tag == "One Way Shield" && Vector3.Dot(hit.collider.transform.forward, currentProjectile.velocity.normalized) > 0;
                 bool hitActivator = hitSomething && hit.transform.tag == "Activator";
-                bool hitAntiProjectile = DidCollideWithPlayerProjectile(currentProjectile.position, ProjectileScale * distanceScale);
+                bool hitAntiProjectile = DidCollideWithPlayerProjectile(currentProjectile.position, currentScale);
 
 
                 if (hitAntiProjectile)
@@ -658,7 +687,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     if (hasVisuals && hitActivator)
                     {
-                        hit.transform.GetComponent<Trigger_Activator>().OnActivation(currentProjectile.visualTransform.gameObject, ProjectileScale);
+                        hit.transform.GetComponent<Trigger_Activator>().OnActivation(currentProjectile.visualTransform.gameObject, currentScale);
 
                         unBounceableSurface = true;
                     }
@@ -668,7 +697,7 @@ public class Weapon_Versatilium : MonoBehaviour
                         Transform decal = Instantiate(currentProjectile.visualTransform.gameObject).transform;
 
                         decal.forward = hit.normal;
-                        decal.position = hit.point + hit.normal * ProjectileScale / 2 + currentProjectile.velocity.normalized * ProjectileScale / 2;
+                        decal.position = hit.point + hit.normal * currentScale / 2 + currentProjectile.velocity.normalized * currentScale / 2;
                         //decal.parent = hit.transform;
 
                         Tools_Animator spriteAnim = decal.GetComponent<Tools_Animator>();
@@ -683,7 +712,7 @@ public class Weapon_Versatilium : MonoBehaviour
                             currentProjectile.remainingBounces--;
                         hasImpacted = false;
 
-                        currentProjectile.position = hit.point + (hit.normal * ProjectileScale / 2); // Makes sure the projectile bounces from the correct position.; // Reset from the wall where it bounced;
+                        currentProjectile.position = hit.point + (hit.normal * currentScale / 2); // Makes sure the projectile bounces from the correct position.; // Reset from the wall where it bounced;
 
                         Vector3 reflectedVelocity = Vector3.Reflect(currentProjectile.velocity, hit.normal);
 
@@ -714,7 +743,7 @@ public class Weapon_Versatilium : MonoBehaviour
             if(hasVisuals)
                 currentProjectile.visualTransform.position = currentProjectile.position;
 
-            currentProjectile.toBeDestroyed = distanceScale == 0 || hasImpacted;
+            currentProjectile.toBeDestroyed = currentScale == 0 || hasImpacted;
         }
         #endregion
 
@@ -774,7 +803,7 @@ public class Weapon_Versatilium : MonoBehaviour
         return projectilePrefab;
     }
 
-    static bool HasFlag(int mask, int effect)
+    public static bool HasFlag(int mask, int effect)
     {
         return (mask & effect) != 0;
     }

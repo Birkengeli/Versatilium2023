@@ -216,7 +216,7 @@ Transform:
   - {fileID: 5927128101365098461}
   - {fileID: 1910714535}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2356575720304098196
 CapsuleCollider:
@@ -457,7 +457,7 @@ MonoBehaviour:
   - name: Recoil+
     moduleSlot: 0
     state: 2
-    allowDuplicates: 0
+    allowDuplicates: 2
     description: 'Greatly increases recoil.
 
       You might be able to reach new
