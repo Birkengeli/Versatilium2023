@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Controller_Character : MonoBehaviour
@@ -114,7 +115,7 @@ public class Controller_Character : MonoBehaviour
         cameraEuler.x = Mathf.Clamp(cameraEuler.x, -90, 90);
 
         camera.transform.localEulerAngles = Vector3.right * cameraEuler.x;
-        transform.localEulerAngles = Vector3.up * cameraEuler.y;
+        transform.localEulerAngles += Vector3.up * mouseX;
     }
     void ControllMovement(float timeStep)
     {
@@ -252,14 +253,16 @@ public class Controller_Character : MonoBehaviour
             for (int i = 0; i < lenght; i++)
             {
                 Transform t = overlaps[i].transform;
-
+              
                 if (t == transform)
                     continue;
 
                 Vector3 dir;
                 float distance;
 
-                if (Physics.ComputePenetration(capsule, transform.position + transform.up * capsule.radius, transform.rotation, overlaps[i], t.position, t.rotation, out dir, out distance))
+                float manualOffsett = -capsule.radius;
+
+                if (Physics.ComputePenetration(capsule, transform.position + transform.up * (capsule.radius + manualOffsett), transform.rotation, overlaps[i], t.position, t.rotation, out dir, out distance))
                 {
                     //Vector3 dir_Vertical = Vector3.Project(dir, transform.up);
                     //dir = dir - dir_Vertical; // This is relative horizontal, not relative to gravity.
