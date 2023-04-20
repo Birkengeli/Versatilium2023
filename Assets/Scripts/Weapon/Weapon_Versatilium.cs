@@ -786,7 +786,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         bool isThePlayer = Player == gameObject;
 
-        if (isThePlayer)
+        if (isThePlayer || !playerWeapon.WeaponStats.counterProjectile)
             return false;
 
         foreach (Projectile currentProjectile in playerWeapon.Projectiles)
