@@ -319,7 +319,7 @@ public class Weapon_Switching : MonoBehaviour
             // Settings
             float recoilBoost = -3f / 3;
             float knockbackBoost = -10f / 3;
-            float damageMultiplierBoost = 2 / 3;
+            float damageMultiplierBoost = 2f;
 
             float projectileSizeMultiplier = 2;
             float minChargePercentage = 0.5f;
@@ -334,16 +334,14 @@ public class Weapon_Switching : MonoBehaviour
                 if (!unEquip)
                 {
                     weaponScript.ProjectileScale *= projectileSizeMultiplier;
-
+                    weaponScript.WeaponStats.damage = weaponScript.WeaponStats.damage * damageMultiplierBoost;
                 }
                 else
                 {
                     weaponScript.ProjectileScale /= projectileSizeMultiplier;
-
+                    weaponScript.WeaponStats.damage = weaponScript.WeaponStats.damage / damageMultiplierBoost;
                 }
 
-
-                print("k");
 
             }
 
@@ -354,16 +352,7 @@ public class Weapon_Switching : MonoBehaviour
             weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
             weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
 
-            if (!unEquip)
-            {
-                weaponScript.WeaponStats.damage *= damageMultiplierBoost;
-
-            }
-            else
-            {
-                weaponScript.WeaponStats.damage /= damageMultiplierBoost;
-
-            }
+           
 
             return;
         }
