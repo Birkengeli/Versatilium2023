@@ -24,7 +24,8 @@ public class Controller_Character : MonoBehaviour
     public float friction = 10;
     public float sprintSpeedModifier = 2;
     public float jumpHeight = 2;
-    public bool hasAirControl;
+    [Range(0.0f, 1.0f)]
+    public float airControl = 1;
     public Vector3 velocity;
     private float characterHeight;
 
@@ -125,6 +126,7 @@ public class Controller_Character : MonoBehaviour
         Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2);
 
         Vector3 groundNormal = hit.transform != null ? hit.normal : Vector3.up;
+        bool isGrounded = fallingInformatiom == "I am grounded.";
 
         float forward = (Input.GetKey(KeyCode.W) ? 1 : 0) + (Input.GetKey(KeyCode.S) ? -1 : 0);
         float sideways = (Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.A) ? -1 : 0);
@@ -139,13 +141,10 @@ public class Controller_Character : MonoBehaviour
         Vector3 verticalVelocity = Vector3.Project(velocity, Vector3.down);
         Vector3 horizontalVelocity = velocity - verticalVelocity;
 
-        if (hasAirControl || fallingInformatiom == "I am grounded.")
-        {
-            velocity -= horizontalVelocity * friction * timeStep;
+        velocity -= horizontalVelocity * friction * timeStep * (isGrounded ? 1 : airControl);
 
-            if (!freezeMovement)
-                velocity += moveDirection * speed * speedModifier * friction * timeStep;
-        }
+        if (!freezeMovement)
+            velocity += moveDirection * speed * speedModifier * friction * timeStep * (isGrounded ? 1 : airControl);
     }
 
     void ControllGravity(float timeStep)
