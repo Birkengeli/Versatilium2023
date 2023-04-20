@@ -312,10 +312,13 @@ public class Weapon_Switching : MonoBehaviour
             float recoilBoost = -3f;
             float knockbackBoost = -10f;
             float damageMultiplierBoost = 2;
+
+            float minChargePercentage = 0.5f;
             // Settings End
 
             bool isInBurst = Weapon_Versatilium.HasFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge);
 
+            weaponScript.Charge_minimumTime = weaponScript.Charge_maximumTime * minChargePercentage;
 
             weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
             weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
