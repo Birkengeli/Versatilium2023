@@ -244,11 +244,11 @@ public class Controller_Character : MonoBehaviour
             //    transform.position += transform.up * (CharacterSettings.PlayerHeight / 2 - EndHit.distance) * timeStep * stairSpeed;
 
             // Collisions
-            Collider[] overlaps = new Collider[4];
+            Collider[] overlaps = new Collider[10];
             LayerMask IgnoreLayer = ~new LayerMask();
             Vector3 End = transform.position + transform.up * (capsule.height / 2 - capsule.radius);
 
-            int lenght = Physics.OverlapSphereNonAlloc(End, capsule.radius * 1.5f, overlaps, IgnoreLayer, QueryTriggerInteraction.Ignore);
+            int lenght = Physics.OverlapSphereNonAlloc(End, capsule.radius * 2.5f, overlaps, IgnoreLayer, QueryTriggerInteraction.Ignore); // I just made it bigger than it needed to be.
 
             for (int i = 0; i < lenght; i++)
             {
