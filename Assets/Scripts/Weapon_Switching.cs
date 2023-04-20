@@ -192,12 +192,12 @@ public class Weapon_Switching : MonoBehaviour
 
         Module previousModule = Modules[customizeableSlots[slotIndex]];
 
-        ApplyModuleStats(previousModule.name, true);
+        ApplyModuleStats(previousModule.name, customizeableSlots[slotIndex], true);
 
         customizeableSlots[slotIndex] = moduleIndex;
         Module currentModule = Modules[moduleIndex];
 
-        ApplyModuleStats(currentModule.name);
+        ApplyModuleStats(currentModule.name, customizeableSlots[slotIndex]);
 
         #region Apply UI
         if (UI_Cores.Length >= slotIndex)
@@ -256,8 +256,16 @@ public class Weapon_Switching : MonoBehaviour
     }
 
 
-    void ApplyModuleStats(string name, bool unEquip = false)
+    void ApplyModuleStats(string name, int index, bool unEquip = false)
     {
+        int coreDuplicateIndex = -1;
+
+
+        foreach (int coreIndex in customizeableSlots)
+        {
+            if(coreIndex == index)
+                coreDuplicateIndex++;
+        }
 
 
         if (name == "-Empty-")
@@ -309,27 +317,40 @@ public class Weapon_Switching : MonoBehaviour
         if (name == "Recoil+")
         {
             // Settings
-            float recoilBoost = -3f;
-            float knockbackBoost = -10f;
-            float damageMultiplierBoost = 2;
+            float recoilBoost = -3f / 3;
+            float knockbackBoost = -10f / 3;
+            float damageMultiplierBoost = 2 / 3;
 
+            float projectileSizeMultiplier = 2;
             float minChargePercentage = 0.5f;
             // Settings End
 
-            bool isInBurst = Weapon_Versatilium.HasFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge);
+            if (coreDuplicateIndex == 0)
+            {
+                weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
+                weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
+
+                weaponScript.ProjectileScale *= projectileSizeMultiplier * (unEquip ? -1 : 1);
+
+            }
+
 
             weaponScript.Charge_minimumTime = weaponScript.Charge_maximumTime * minChargePercentage;
 
-            weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
-            weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
-
+         
             weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
             weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
 
             if (!unEquip)
+            {
                 weaponScript.WeaponStats.damage *= damageMultiplierBoost;
+
+            }
             else
+            {
                 weaponScript.WeaponStats.damage /= damageMultiplierBoost;
+
+            }
 
             return;
         }
