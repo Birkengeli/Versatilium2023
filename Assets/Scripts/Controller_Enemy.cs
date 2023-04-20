@@ -35,6 +35,7 @@ public class Controller_Enemy : MonoBehaviour
         alwaysShooting = 1 << 7,
         ignoresPlayer = 1 << 8,
         startsPassive = 1 << 9,
+        doesNotChasePlayer = 1 << 10,
     }
 
     [System.Flags]
@@ -327,29 +328,48 @@ public class Controller_Enemy : MonoBehaviour
         #endregion
 
         #region Combat Walking
-        if(canMove)
+
+        bool chasesPlayer = !HasFlag((int)BehaviorTags, (int)BehaviorTag.doesNotChasePlayer);
+
+        if (canMove)
         {
-            // Where can I go?
-            float distanceToWall_Right = 0;
-            float distanceToWall_Left = 0;
-
-            for (int i = 0; i < 2; i++)
+            if (chasesPlayer)
             {
-                RaycastHit hit;
-                Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
 
-                if (hit.transform != null)
+
+                // Where can I go?
+                float distanceToWall_Right = 0;
+                float distanceToWall_Left = 0;
+
+                for (int i = 0; i < 2; i++)
                 {
-                    if (i == 0)
-                        distanceToWall_Right = hit.distance;
-                    else
-                        distanceToWall_Left = hit.distance;
+                    RaycastHit hit;
+                    Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
+
+                    if (hit.transform != null)
+                    {
+                        if (i == 0)
+                            distanceToWall_Right = hit.distance;
+                        else
+                            distanceToWall_Left = hit.distance;
+                    }
+
+                }
+
+                currentTargetLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
+                currentTargetLocation = targetPosition;
+            }
+            else // If it does not chase the player
+            {
+                bool onRandomMove = Random.Range(0f, 1f) < (timeStep / moveFrequency);
+                if (onRandomMove)
+                {
+                    currentTargetLocation = WanderThowards(transform.position, moveSpeed * moveFrequency);
+                    //transform.LookAt(currentTargetLocation);
+
                 }
 
             }
-
-            currentTargetLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
-            currentTargetLocation = targetPosition;
         }
         #endregion
     }
