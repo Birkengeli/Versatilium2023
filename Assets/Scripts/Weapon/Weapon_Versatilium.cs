@@ -327,12 +327,13 @@ public class Weapon_Versatilium : MonoBehaviour
         #region Charge Options
         float minChargePercentage = Charge_minimumTime/Charge_maximumTime;
         float chargePercentage = Mathf.Clamp(HasFlag((int)currentStats.triggerTypes, (int)TriggerFlags.Charge) ? Charge_current / Charge_maximumTime : 1, minChargePercentage, 1);
+        float chargeCubed = Mathf.Pow(chargePercentage, 3);
 
         #endregion
 
         if (isWieldedByPlayer)
         {
-            playerScript.velocity += User_POV.forward * currentStats.knockback_self * chargePercentage;
+            playerScript.velocity += User_POV.forward * currentStats.knockback_self * chargeCubed;
         }
 
         if (!isWieldedByPlayer)
