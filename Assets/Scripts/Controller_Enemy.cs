@@ -117,7 +117,7 @@ public class Controller_Enemy : MonoBehaviour
         foreach (Transform child in transform)
         {
             eye = child;
-            if (eye != anim.transform.parent)
+            if (eye.position == Vector3.zero)
                 break;
         }
 
