@@ -330,7 +330,20 @@ public class Weapon_Switching : MonoBehaviour
                 weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
                 weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
 
-                weaponScript.ProjectileScale *= projectileSizeMultiplier * (unEquip ? -1 : 1);
+
+                if (!unEquip)
+                {
+                    weaponScript.ProjectileScale *= projectileSizeMultiplier;
+
+                }
+                else
+                {
+                    weaponScript.ProjectileScale /= projectileSizeMultiplier;
+
+                }
+
+
+                print("k");
 
             }
 
