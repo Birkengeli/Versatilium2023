@@ -758,7 +758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1412d3b0d67b24e42b4558c95186f6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstLevel: Scene_Graybox_Level1
+  firstLevel: Scene_Graybox_Level2
 --- !u!1 &1493233368
 GameObject:
   m_ObjectHideFlags: 0
