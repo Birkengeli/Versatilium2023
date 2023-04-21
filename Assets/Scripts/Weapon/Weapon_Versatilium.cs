@@ -710,7 +710,7 @@ public class Weapon_Versatilium : MonoBehaviour
                         decal.GetComponent<Tools_Sprite>().enabled = false;
                     }
 
-                    if (currentProjectile.remainingBounces > 0 && !unBounceableSurface || bounceableSurface)
+                    if (currentProjectile.remainingBounces > 0 && !hitCharacter && !unBounceableSurface || bounceableSurface)
                     {
                         if(!bounceableSurface)
                             currentProjectile.remainingBounces--;
