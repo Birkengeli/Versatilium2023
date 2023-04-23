@@ -128,9 +128,11 @@ public class Controller_Character : MonoBehaviour
         Vector3 groundNormal = hit.transform != null ? hit.normal : Vector3.up;
         bool isGrounded = fallingInformatiom == "I am grounded.";
 
+        bool isSprinting = isGrounded && Input.GetKey(KeyCode.LeftShift);
+
         float forward = (Input.GetKey(KeyCode.W) ? 1 : 0) + (Input.GetKey(KeyCode.S) ? -1 : 0);
         float sideways = (Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.A) ? -1 : 0);
-        float speedModifier = Input.GetKey(KeyCode.LeftShift) ? sprintSpeedModifier : 1;
+        float speedModifier = isSprinting ? sprintSpeedModifier : 1;
 
 
         Vector3 groundForward = Vector3.Cross(transform.right, groundNormal);
