@@ -278,16 +278,19 @@ public class Weapon_Switching : MonoBehaviour
 
             int pelletIncrease = 8;
             float deviationIncrease = 0.05f;
+            float damageMultiplierBoost = 2f;
 
             if (!unEquip)
             {
                 weaponScript.WeaponStats.PelletCount += pelletIncrease;
                 weaponScript.WeaponStats.Deviation += deviationIncrease;
+                weaponScript.WeaponStats.damage = weaponScript.WeaponStats.damage * damageMultiplierBoost;
             }
             else
             {
                 weaponScript.WeaponStats.PelletCount -= pelletIncrease;
                 weaponScript.WeaponStats.Deviation -= deviationIncrease;
+                weaponScript.WeaponStats.damage = weaponScript.WeaponStats.damage / damageMultiplierBoost;
             }
 
             return;
