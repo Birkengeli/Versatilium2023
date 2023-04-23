@@ -320,7 +320,6 @@ MonoBehaviour:
     Deviation: 0.01
     knockback_self: 0
     inheritUserVelocity: 0
-    targetSeekingStrength: 0
     distanceBeforeDamageDrop: 20
     Projectile_Speed: 10
     Projectile_Gravity: 0
@@ -458,7 +457,7 @@ MonoBehaviour:
   - name: Recoil+
     moduleSlot: 0
     state: 2
-    allowDuplicates: 2
+    allowDuplicates: 0
     description: 'Greatly increases recoil.
 
       You might be able to reach new

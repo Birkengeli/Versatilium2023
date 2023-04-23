@@ -247,7 +247,7 @@ public class Controller_Character : MonoBehaviour
             LayerMask IgnoreLayer = ~new LayerMask();
             Vector3 End = transform.position + transform.up * (capsule.height / 2 - capsule.radius);
 
-            int lenght = Physics.OverlapSphereNonAlloc(End, capsule.radius * 2.5f, overlaps, IgnoreLayer, QueryTriggerInteraction.Ignore); // I just made it bigger than it needed to be.
+            int lenght = Physics.OverlapSphereNonAlloc(End, capsule.height / 2, overlaps, IgnoreLayer, QueryTriggerInteraction.Ignore); // I just made it bigger than it needed to be.
 
             for (int i = 0; i < lenght; i++)
             {

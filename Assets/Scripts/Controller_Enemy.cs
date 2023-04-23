@@ -254,7 +254,7 @@ public class Controller_Enemy : MonoBehaviour
 
             }
 
-            TurnTowards(timeStep, currentTargetLocation, false, TurnSpeed);
+            TurnTowards(timeStep, currentTargetLocation, false, TurnSpeed, true);
         }
     }
 
@@ -428,6 +428,16 @@ public class Controller_Enemy : MonoBehaviour
         Vector3 directionToTarget = targetPosition - currentTransform.position;
 
         currentTransform.forward = Vector3.Slerp(currentTransform.forward, directionToTarget.normalized, turnSpeed * timeStep);
+
+
+
+
+
+
+
+
+
+
     }
 
     void Movement(float timeStep, Vector3 targetLocation)

@@ -309,7 +309,9 @@ public class Trigger_Event : MonoBehaviour
 
             if (currentEvent.triggerType == TriggerTypes.ReturnToMainMenu)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+                SceneManager.LoadScene(0);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
 
             if (currentEvent.triggerType == TriggerTypes.Cutscene)
