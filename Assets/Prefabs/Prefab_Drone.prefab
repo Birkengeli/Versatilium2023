@@ -192,10 +192,10 @@ MonoBehaviour:
   canFire: 1
   WeaponStats:
     triggerTypes: 1
-    burstCount: 3
-    burst_fireRate: 4
+    burstCount: 2
+    burst_fireRate: 0
     burstCounter: 0
-    ProjectileType: 0
+    ProjectileType: 1
     damage: 34
     knockback: 10
     fireRate: 2
@@ -203,11 +203,13 @@ MonoBehaviour:
     Deviation: 0.01
     knockback_self: 0
     inheritUserVelocity: 0
-    targetSeekingStrength: 0
     distanceBeforeDamageDrop: 20
     Projectile_Speed: 25
     Projectile_Gravity: 9.807
     canTeleportUser: 0
+    counterProjectile: 0
+    isExplosive: 0
+    homingGravity: 0
     bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323
@@ -224,7 +226,15 @@ MonoBehaviour:
   useVisuals: 1
   projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
   ProjectileScale: 0.1
-  soundClips: []
+  soundClips:
+  - description: On Fire
+    soundFlags: 16
+    audioClips:
+    - {fileID: 8300000, guid: 7844bb425ea33df468f8c9a9c21bbd68, type: 3}
+    random: 0
+    volumeSlider: 0.6
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &7582054774486425959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,10 +253,10 @@ MonoBehaviour:
   TurnSpeed: 5
   velocity: {x: 0, y: 0, z: 0}
   moveFrequency: 5
-  wanderDistanceMax: 50
+  wanderDistanceMax: 10
   ReactionTime: 1
   rememberPlayerFor: 3
-  DetectionRange: 10
+  DetectionRange: 25
   isLeadingTarget: 1
   ConeOfFire: 45
   isInCombat: 0
@@ -255,7 +265,23 @@ MonoBehaviour:
   AnimationFlags: 26
   drops: []
   player: {fileID: 0}
-  soundClips: []
+  soundClips:
+  - description: 
+    soundFlags: 2
+    audioClips:
+    - {fileID: 8300000, guid: 4873f24387e172640bb7c4e33df47808, type: 3}
+    random: 0
+    volumeSlider: 0.623
+    lastIndex: 0
+    audioSource: {fileID: 0}
+  - description: 
+    soundFlags: 4
+    audioClips:
+    - {fileID: 8300000, guid: efa49870cd43d0b4290462955b844cbe, type: 3}
+    random: 0
+    volumeSlider: 0.744
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &7582054774486425960
 MonoBehaviour:
   m_ObjectHideFlags: 0

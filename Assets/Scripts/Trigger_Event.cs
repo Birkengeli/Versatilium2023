@@ -19,7 +19,8 @@ public class Trigger_Event : MonoBehaviour
         HurtBox,
         ToggleObjectExistence,
         DisplayText,
-        ReturnToMainMenu, 
+        ReturnToMainMenu,
+        GoToLevel2,
         Cutscene,
         FadeToColor,
         TeleportToGameObject,
@@ -310,6 +311,13 @@ public class Trigger_Event : MonoBehaviour
             if (currentEvent.triggerType == TriggerTypes.ReturnToMainMenu)
             {
                 SceneManager.LoadScene(0);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.GoToLevel2)
+            {
+                SceneManager.LoadScene(2);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
