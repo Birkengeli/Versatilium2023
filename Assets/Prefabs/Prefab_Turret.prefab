@@ -36,7 +36,7 @@ Transform:
   - {fileID: 8338807757479677898}
   - {fileID: 2447713973112412336}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &93515398318265219
 CapsuleCollider:
@@ -78,23 +78,23 @@ MonoBehaviour:
   WeaponStats:
     triggerTypes: 1
     burstCount: 3
-    burst_fireRate: 4
+    burst_fireRate: 2
     burstCounter: 0
     ProjectileType: 1
     damage: 10
     knockback: 10
-    fireRate: 5
+    fireRate: 1
     PelletCount: 1
     Deviation: 0.01
     knockback_self: 0
     inheritUserVelocity: 0
-    targetSeekingStrength: 0
     distanceBeforeDamageDrop: 20
     Projectile_Speed: 25
     Projectile_Gravity: 0
     canTeleportUser: 0
     counterProjectile: 0
     isExplosive: 0
+    homingGravity: 0
     bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323
