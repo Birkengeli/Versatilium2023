@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Weapon_Versatilium;
@@ -15,6 +16,7 @@ public class Weapon_Pickup : MonoBehaviour
 
         GiveCore = 1 << 1,
         RemoveCore = 1 << 2,
+        Collectible = 1 << 3,
     }
 
     public string coreName = "N/A";
@@ -25,12 +27,32 @@ public class Weapon_Pickup : MonoBehaviour
     float distance;
     Transform playerTransform;
 
+    public TMP_Text UI_Collectible;
 
     void Start()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = player.transform;
         swapScript = player.GetComponent<Weapon_Switching>();
+
+        bool isCollectible = (HasFlag((int)flags, (int)PickupFlags.Collectible));
+        if (isCollectible)
+        {
+            distance = 1f;
+
+
+            if (UI_Collectible != null)
+            {
+                string[] words = UI_Collectible.text.Split('/');
+
+                float current = int.Parse(words[0]);
+                float total = int.Parse(words[1]);
+
+                UI_Collectible.text = "0/"+ (total+1);
+            }
+
+            return;
+        }
 
         Weapon_Switching.Module currentModule = GetModule(coreName);
 
@@ -46,19 +68,28 @@ public class Weapon_Pickup : MonoBehaviour
     void Update()
     {
         Vector3 center = transform.position;
+        float distanceToPlayer = Vector3.Distance(center, playerTransform.position);
 
+        bool isCollectible = (HasFlag((int)flags, (int)PickupFlags.Collectible));
 
-        if (Vector3.Distance(center, playerTransform.position) < distance)
+        if (isCollectible) Collectible(true, false);
+
+        if (distanceToPlayer < distance)
         {
             // On Pickup
 
-            OnPickup();
+            if (isCollectible)
+                Collectible(false, true);
+            else
+                OnPickup();
 
         }
     }
 
     void OnPickup()
     {
+      
+
         gameObject.SetActive(false);
 
 
@@ -97,6 +128,50 @@ public class Weapon_Pickup : MonoBehaviour
             }
         }
     }
+
+    float velocity;
+
+    void Collectible(bool isInUpdate, bool onPickup)
+    {
+        bool isTriggered = transform.parent == playerTransform;
+        if (onPickup)
+        {
+            transform.parent = playerTransform;
+            transform.localPosition = Vector3.forward * 1;
+            transform.forward = playerTransform.forward;
+
+            Transform[] allChildren = GetComponentsInChildren<Transform>();
+            foreach (Transform child in allChildren)
+                child.gameObject.layer = LayerMask.NameToLayer("VisibleOnlyInFirstPerson");
+
+
+            Destroy(gameObject, 1f);
+
+            if (UI_Collectible != null)
+            {
+                string[] words = UI_Collectible.text.Split('/');
+
+                float current = int.Parse(words[0]);
+                float total = int.Parse(words[1]);
+
+                UI_Collectible.text = "" + (current + 1) + "/" + total;
+            }
+
+            distance = 0;
+            isTriggered = true;
+        }
+
+
+        if (isInUpdate && isTriggered)
+        {
+            velocity += 0.1f * Time.deltaTime;
+            transform.eulerAngles += Vector3.up * velocity * Time.deltaTime;
+            transform.localPosition += (Vector3.forward + Vector3.up) * velocity;
+
+        }
+
+    }
+
 
     Weapon_Switching.Module GetModule(string name)
     {
