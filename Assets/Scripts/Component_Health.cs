@@ -21,7 +21,8 @@ public class Component_Health : MonoBehaviour
     public float deathCountdown_SpeedModifier = 2;
     public float deathCountdown_SpeedDuration = 0.5f;
     private float lastSpeedUse;
-    public Image UI_Healthbar_Fill;
+    public Slider UI_Healthbar_Fill;
+    public Text UI_Healthbar_Numbers;
     public Image UI_POV_Death;
     public GameObject Prop_Weapon;
 
@@ -65,7 +66,10 @@ public class Component_Health : MonoBehaviour
             if (healthCurrent < HealthMax)
                 healthCurrent += HealthMax * healingPercentage * 2 * healingModifier * Time.deltaTime / 100;
 
-            UI_Healthbar_Fill.fillAmount = healthCurrent / HealthMax;
+            float UI_HealthPercentage = (float)healthCurrent / HealthMax;
+
+            UI_Healthbar_Fill.value = UI_HealthPercentage;
+            UI_Healthbar_Numbers.text = "" + Mathf.Round(UI_HealthPercentage * 100) + "/" + (int)HealthMax;
 
         }
     }
@@ -83,7 +87,10 @@ public class Component_Health : MonoBehaviour
 
             if (isPlayer)
             {
-                UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
+                float UI_HealthPercentage = (float)healthCurrent / HealthMax;
+
+                UI_Healthbar_Fill.value = UI_HealthPercentage;
+                UI_Healthbar_Numbers.text = "" + Mathf.Round(UI_HealthPercentage * 100) + "/" + (int)HealthMax;
             }
         }
 
@@ -140,7 +147,10 @@ public class Component_Health : MonoBehaviour
 
         if (isPlayer)
         {
-            UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
+            float UI_HealthPercentage = (float)healthCurrent / HealthMax;
+
+            UI_Healthbar_Fill.value = UI_HealthPercentage;
+            UI_Healthbar_Numbers.text = "" + Mathf.Round(UI_HealthPercentage * 100) + "/" + (int)HealthMax;
         }
 
         bool onDeath = !isDead && healthCurrent <= 0;

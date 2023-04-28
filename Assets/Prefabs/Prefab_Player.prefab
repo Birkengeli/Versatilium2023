@@ -258,7 +258,7 @@ MonoBehaviour:
   friction: 10
   sprintSpeedModifier: 1.7
   jumpHeight: 2
-  airControl: 1
+  airControl: 0.158
   velocity: {x: 0, y: 0, z: 0}
   gravity: 9.81
   terminalVelocity: 80.55
@@ -531,6 +531,7 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   UI_Healthbar_Fill: {fileID: 0}
+  UI_Healthbar_Numbers: {fileID: 0}
   UI_POV_Death: {fileID: 0}
   Prop_Weapon: {fileID: 1853999085285571213, guid: 2ed468396f3ff5f4e8247fc79f306b4d, type: 3}
 --- !u!82 &2049525942
