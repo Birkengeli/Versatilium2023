@@ -61,13 +61,13 @@ Transform:
   m_GameObject: {fileID: 2939138269431015529}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 12.23, y: 1, z: 55.65}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6185528789807833055}
   - {fileID: 546635622514395301}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!136 &2819876868803625878
 CapsuleCollider:
@@ -194,6 +194,7 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   UI_Healthbar_Fill: {fileID: 0}
+  UI_Healthbar_Numbers: {fileID: 0}
   UI_POV_Death: {fileID: 0}
   Prop_Weapon: {fileID: 0}
 --- !u!82 &8850584620377139469
@@ -444,6 +445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 7630798151035858691, guid: 57f5ed2d2a9072549acbb744c216dece, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cf637cd4a7d86ed4a946a2d17573d30e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

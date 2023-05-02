@@ -36,7 +36,7 @@ Transform:
   - {fileID: 8338807757479677898}
   - {fileID: 2447713973112412336}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &93515398318265219
 CapsuleCollider:
@@ -111,7 +111,15 @@ MonoBehaviour:
   useVisuals: 1
   projectilePrefab: {fileID: 1009257707128953476, guid: 80234733086fad0428eef6f718f12cd0, type: 3}
   ProjectileScale: 0.25
-  soundClips: []
+  soundClips:
+  - description: On Fire
+    soundFlags: 16
+    audioClips:
+    - {fileID: 8300000, guid: 4873f24387e172640bb7c4e33df47808, type: 3}
+    random: 0
+    volumeSlider: 0
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &942857007020689621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,16 +141,24 @@ MonoBehaviour:
   wanderDistanceMax: 50
   ReactionTime: 1
   rememberPlayerFor: 3
-  DetectionRange: 10
+  DetectionRange: 24.6
   isLeadingTarget: 1
   ConeOfFire: 45
   isInCombat: 0
   Weapon: {fileID: 2447713972492215925}
-  BehaviorTags: 101
+  BehaviorTags: 37
   AnimationFlags: 224
   drops: []
   player: {fileID: 0}
-  soundClips: []
+  soundClips:
+  - description: On Hit
+    soundFlags: 2
+    audioClips:
+    - {fileID: 8300000, guid: b14afc46d85166040b5884240df0d386, type: 3}
+    random: 0
+    volumeSlider: 0
+    lastIndex: 0
+    audioSource: {fileID: 0}
 --- !u!114 &942857007020689626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +179,7 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   UI_Healthbar_Fill: {fileID: 0}
+  UI_Healthbar_Numbers: {fileID: 0}
   UI_POV_Death: {fileID: 0}
   Prop_Weapon: {fileID: 0}
 --- !u!82 &6682667854488598808
@@ -428,6 +445,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1526656109946469507, guid: 0b38227870518414781514fc6c18a58e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cf637cd4a7d86ed4a946a2d17573d30e, type: 2}
     - target: {fileID: 919132149155446097, guid: 0b38227870518414781514fc6c18a58e, type: 3}
       propertyPath: m_Name
       value: Enemy_Turret
@@ -436,6 +457,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3780565319373548736, guid: 0b38227870518414781514fc6c18a58e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 117c6606e4eed56469da3e90d381baec, type: 2}
+    - target: {fileID: 7459563683338109606, guid: 0b38227870518414781514fc6c18a58e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 44bc52851f94bda4eb6601194417d217, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

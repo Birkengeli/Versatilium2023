@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene_Graybox_Level1.unity
     guid: 77182ff2355e3764e90618c2afd82e2c
   - enabled: 1
-    path: Assets/Scenes/Scene_Graybox_Level2.unity
+    path: Assets/Scenes/Scene_Graybox_Level2A.unity
     guid: 4a2cc04670bd84d4c9962dbd2a52a5cd
   m_configObjects: {}
