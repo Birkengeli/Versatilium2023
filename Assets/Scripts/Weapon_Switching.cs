@@ -79,6 +79,7 @@ public class Weapon_Switching : MonoBehaviour
         playerScript = GetComponent<Controller_Character>();
         weaponScript = GetComponent<Weapon_Versatilium>();
 
+
         ToggleUI(false);
 
         ResetCores();
@@ -115,6 +116,7 @@ public class Weapon_Switching : MonoBehaviour
             if (mouseWheel != 0)
                 Button_OnClick(mainCoreIndex * 2 + (mouseWheel == 1 ? 1 : 0));
         }
+
     }
 
 	#endregion
@@ -202,6 +204,8 @@ public class Weapon_Switching : MonoBehaviour
         #region Apply UI
         if (UI_Cores.Length >= slotIndex)
         {
+
+            print(missingIcon);
             UI_Cores[slotIndex].sprite = currentModule.Icon != null ? currentModule.Icon : missingIcon;
         }
 
@@ -277,7 +281,7 @@ public class Weapon_Switching : MonoBehaviour
         {
 
             int pelletIncrease = 8;
-            float deviationIncrease = 0.05f;
+            float deviationIncrease = 0.2f;
             float damageMultiplierBoost = 2f;
 
             if (!unEquip)
@@ -296,10 +300,11 @@ public class Weapon_Switching : MonoBehaviour
             return;
         }
         if (name == "Ricochett")
-        {
 
+        {
             if (!unEquip)
             {
+ 
                 weaponScript.WeaponStats.bounceCount += 1;
             }
             else
