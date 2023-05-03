@@ -25,7 +25,7 @@ public class Component_Health : MonoBehaviour
     public Text UI_Healthbar_Numbers;
     public Image UI_POV_Death;
     public GameObject Prop_Weapon;
-
+    
 
 
     [Header("Components")]
