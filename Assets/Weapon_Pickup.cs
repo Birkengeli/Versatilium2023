@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Weapon_Versatilium;
 
 public class Weapon_Pickup : MonoBehaviour
@@ -155,6 +156,9 @@ public class Weapon_Pickup : MonoBehaviour
                 float total = int.Parse(words[1]);
 
                 UI_Collectible.text = "" + (current + 1) + "/" + total;
+
+                finalPickup = current + 1 == total;
+      
             }
 
             distance = 0;
@@ -167,11 +171,25 @@ public class Weapon_Pickup : MonoBehaviour
             velocity += 0.1f * Time.deltaTime;
             transform.eulerAngles += Vector3.up * velocity * Time.deltaTime;
             transform.localPosition += (Vector3.forward + Vector3.up) * velocity;
-
         }
+
 
     }
 
+    bool finalPickup;
+
+
+    private void OnDestroy()
+    {
+        if(finalPickup)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            SceneManager.LoadScene(0);
+        }
+
+    }
 
     Weapon_Switching.Module GetModule(string name)
     {

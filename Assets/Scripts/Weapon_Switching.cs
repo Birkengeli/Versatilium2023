@@ -40,9 +40,14 @@ public class Weapon_Switching : MonoBehaviour
         [TextArea(5, 20)]
         public string description;
 
+
+        [Header("Potency (default is 100)")]
+        public float Potency = 100;
+
         [Header("Cores")]
         public Color coreColor = Color.cyan;
         public Sprite Icon;
+
 
         [Header("Read-Only")]
         public int[] storedIndexes;
@@ -194,12 +199,12 @@ public class Weapon_Switching : MonoBehaviour
 
         Module previousModule = Modules[customizeableSlots[slotIndex]];
 
-        ApplyModuleStats(previousModule.name, customizeableSlots[slotIndex], true);
+        ApplyModuleStats(previousModule.name, customizeableSlots[slotIndex], previousModule.Potency, true);
 
         customizeableSlots[slotIndex] = moduleIndex;
         Module currentModule = Modules[moduleIndex];
 
-        ApplyModuleStats(currentModule.name, customizeableSlots[slotIndex]);
+        ApplyModuleStats(currentModule.name, customizeableSlots[slotIndex], currentModule.Potency);
 
         #region Apply UI
         if (UI_Cores.Length >= slotIndex)
@@ -260,7 +265,7 @@ public class Weapon_Switching : MonoBehaviour
     }
 
 
-    void ApplyModuleStats(string name, int index, bool unEquip = false)
+    void ApplyModuleStats(string name, int index, float potency, bool unEquip = false)
     {
         int coreDuplicateIndex = -1;
 
@@ -281,7 +286,7 @@ public class Weapon_Switching : MonoBehaviour
         {
 
             int pelletIncrease = 8;
-            float deviationIncrease = 0.2f;
+            float deviationIncrease = 0.2f * (potency / 100);
             float damageMultiplierBoost = 2f;
 
             if (!unEquip)
@@ -325,11 +330,21 @@ public class Weapon_Switching : MonoBehaviour
         if (name == "Recoil+")
         {
             // Settings
-            float recoilBoost = -3f / 3;
-            float knockbackBoost = -10f / 3;
-            float damageMultiplierBoost = 2f;
+            float recoilBoost = -3f / 3 * (potency / 100);
+            float knockbackBoost = -10f / 3 * (potency / 100);
+            // Settings End
 
-            float projectileSizeMultiplier = 2;
+            weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
+            weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
+
+            return;
+        }
+
+        if (name == "Charge")
+        {
+            // Settings
+            float damageMultiplierBoost = 2f * (potency / 100);
+            float projectileSizeMultiplier = 2f * (potency / 100);
             float minChargePercentage = 0.5f;
             // Settings End
 
@@ -337,7 +352,6 @@ public class Weapon_Switching : MonoBehaviour
             {
                 weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.Charge, unEquip);
                 weaponScript.WeaponStats.triggerTypes = (Weapon_Versatilium.TriggerFlags)ApplyFlag((int)weaponScript.WeaponStats.triggerTypes, (int)Weapon_Versatilium.TriggerFlags.SemiAutomatic, !unEquip);
-
 
                 if (!unEquip)
                 {
@@ -349,18 +363,8 @@ public class Weapon_Switching : MonoBehaviour
                     weaponScript.ProjectileScale /= projectileSizeMultiplier;
                     weaponScript.WeaponStats.damage = weaponScript.WeaponStats.damage / damageMultiplierBoost;
                 }
-
-
             }
-
-
             weaponScript.Charge_minimumTime = weaponScript.Charge_maximumTime * minChargePercentage;
-
-         
-            weaponScript.WeaponStats.knockback -= recoilBoost * (unEquip ? -1 : 1);
-            weaponScript.WeaponStats.knockback_self += knockbackBoost * (unEquip ? -1 : 1);
-
-           
 
             return;
         }
