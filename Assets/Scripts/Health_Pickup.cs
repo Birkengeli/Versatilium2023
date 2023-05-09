@@ -50,9 +50,7 @@ public class Health_Pickup : MonoBehaviour
 
     void OnPickup()
     {
-        healthScript.healthCurrent += Healing;
-        if(healthScript.healthCurrent > 100)
-            healthScript.healthCurrent = 100;
+        healthScript.OnHealing(Healing);
 
         float duration = Tools_Sound.Play(new Tools_Sound.SoundClip[1] { sound }, Tools_Sound.SoundFlags.OnUse);
         Destroy(gameObject, duration);

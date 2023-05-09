@@ -168,6 +168,9 @@ public class Component_Health : MonoBehaviour
       
     }
 
+
+  
+
     public static Component_Health Get(Transform target)
     {
         Component_Health healthScript = target.GetComponent<Component_Health>();
